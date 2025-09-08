@@ -1,0 +1,602 @@
+[
+  {
+    "id": 1,
+    "question": "Who is known as the 'Father of Computers'?",
+    "options": ["Alan Turing", "Charles Babbage", "John von Neumann", "Bill Gates"],
+    "correct": 1
+  },
+  {
+    "id": 2,
+    "question": "Who was the first President of the United States?",
+    "options": ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
+    "correct": 1
+  },
+  {
+    "id": 3,
+    "question": "Who is known as the 'Father of the Nation' in India?",
+    "options": ["Jawaharlal Nehru", "Mahatma Gandhi", "Subhash Chandra Bose", "Sardar Patel"],
+    "correct": 1
+  },
+  {
+    "id": 4,
+    "question": "What is the capital of France?",
+    "options": ["London", "Berlin", "Paris", "Rome"],
+    "correct": 2
+  },
+  {
+    "id": 5,
+    "question": "Which planet is known as the 'Red Planet'?",
+    "options": ["Venus", "Mars", "Jupiter", "Saturn"],
+    "correct": 1
+  },
+  {
+    "id": 6,
+    "question": "Who wrote 'Romeo and Juliet'?",
+    "options": ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+    "correct": 1
+  },
+  {
+    "id": 7,
+    "question": "What is the largest ocean on Earth?",
+    "options": ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean", "Arctic Ocean"],
+    "correct": 1
+  },
+  {
+    "id": 8,
+    "question": "Which element has the chemical symbol 'O'?",
+    "options": ["Gold", "Silver", "Oxygen", "Iron"],
+    "correct": 2
+  },
+  {
+    "id": 9,
+    "question": "What is the tallest mountain in the world?",
+    "options": ["K2", "Mount Everest", "Kangchenjunga", "Lhotse"],
+    "correct": 1
+  },
+  {
+    "id": 10,
+    "question": "Who painted the Mona Lisa?",
+    "options": ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Michelangelo"],
+    "correct": 1
+  },
+  {
+    "id": 11,
+    "question": "What is the smallest country in the world?",
+    "options": ["Monaco", "Vatican City", "San Marino", "Liechtenstein"],
+    "correct": 1
+  },
+  {
+    "id": 12,
+    "question": "Which year did World War II end?",
+    "options": ["1944", "1945", "1946", "1947"],
+    "correct": 1
+  },
+  {
+    "id": 13,
+    "question": "What is the currency of Japan?",
+    "options": ["Won", "Yuan", "Yen", "Ringgit"],
+    "correct": 2
+  },
+  {
+    "id": 14,
+    "question": "Who invented the telephone?",
+    "options": ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "Benjamin Franklin"],
+    "correct": 1
+  },
+  {
+    "id": 15,
+    "question": "What is the largest mammal in the world?",
+    "options": ["African Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+    "correct": 1
+  },
+  {
+    "id": 16,
+    "question": "Which continent is known as the 'Dark Continent'?",
+    "options": ["Asia", "Africa", "South America", "Australia"],
+    "correct": 1
+  },
+  {
+    "id": 17,
+    "question": "What is the hardest natural substance on Earth?",
+    "options": ["Gold", "Iron", "Diamond", "Platinum"],
+    "correct": 2
+  },
+  {
+    "id": 18,
+    "question": "Who wrote '1984'?",
+    "options": ["Aldous Huxley", "George Orwell", "Ray Bradbury", "H.G. Wells"],
+    "correct": 1
+  },
+  {
+    "id": 19,
+    "question": "What is the speed of light in vacuum?",
+    "options": ["300,000 km/s", "150,000 km/s", "450,000 km/s", "600,000 km/s"],
+    "correct": 0
+  },
+  {
+    "id": 20,
+    "question": "Which gas makes up most of Earth's atmosphere?",
+    "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+    "correct": 1
+  },
+  {
+    "id": 21,
+    "question": "Who was the first person to walk on the moon?",
+    "options": ["Buzz Aldrin", "Neil Armstrong", "John Glenn", "Alan Shepard"],
+    "correct": 1
+  },
+  {
+    "id": 22,
+    "question": "What is the capital of Australia?",
+    "options": ["Sydney", "Melbourne", "Canberra", "Perth"],
+    "correct": 2
+  },
+  {
+    "id": 23,
+    "question": "Which organ in the human body produces insulin?",
+    "options": ["Liver", "Pancreas", "Kidney", "Heart"],
+    "correct": 1
+  },
+  {
+    "id": 24,
+    "question": "What is the longest river in the world?",
+    "options": ["Amazon River", "Nile River", "Yangtze River", "Mississippi River"],
+    "correct": 1
+  },
+  {
+    "id": 25,
+    "question": "Who composed 'The Four Seasons'?",
+    "options": ["Johann Sebastian Bach", "Antonio Vivaldi", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"],
+    "correct": 1
+  },
+  {
+    "id": 26,
+    "question": "What is the chemical formula for water?",
+    "options": ["H2O", "CO2", "NaCl", "CH4"],
+    "correct": 0
+  },
+  {
+    "id": 27,
+    "question": "Which country gifted the Statue of Liberty to the United States?",
+    "options": ["United Kingdom", "France", "Spain", "Italy"],
+    "correct": 1
+  },
+  {
+    "id": 28,
+    "question": "What is the largest desert in the world?",
+    "options": ["Sahara Desert", "Antarctica", "Gobi Desert", "Arabian Desert"],
+    "correct": 1
+  },
+  {
+    "id": 29,
+    "question": "Who developed the theory of evolution by natural selection?",
+    "options": ["Gregor Mendel", "Charles Darwin", "Louis Pasteur", "Alfred Wallace"],
+    "correct": 1
+  },
+  {
+    "id": 30,
+    "question": "What is the smallest unit of matter?",
+    "options": ["Molecule", "Atom", "Electron", "Proton"],
+    "correct": 1
+  },
+  {
+    "id": 31,
+    "question": "Which Shakespeare play features the characters Romeo and Juliet?",
+    "options": ["Hamlet", "Romeo and Juliet", "Macbeth", "Othello"],
+    "correct": 1
+  },
+  {
+    "id": 32,
+    "question": "What is the capital of Canada?",
+    "options": ["Toronto", "Vancouver", "Ottawa", "Montreal"],
+    "correct": 2
+  },
+  {
+    "id": 33,
+    "question": "Which planet is closest to the Sun?",
+    "options": ["Venus", "Mercury", "Earth", "Mars"],
+    "correct": 1
+  },
+  {
+    "id": 34,
+    "question": "Who painted 'The Starry Night'?",
+    "options": ["Claude Monet", "Vincent van Gogh", "Pablo Picasso", "Salvador Dali"],
+    "correct": 1
+  },
+  {
+    "id": 35,
+    "question": "What is the largest bone in the human body?",
+    "options": ["Tibia", "Femur", "Humerus", "Fibula"],
+    "correct": 1
+  },
+  {
+    "id": 36,
+    "question": "Which country has the most time zones?",
+    "options": ["United States", "Russia", "China", "Canada"],
+    "correct": 1
+  },
+  {
+    "id": 37,
+    "question": "What is the study of earthquakes called?",
+    "options": ["Geology", "Seismology", "Meteorology", "Volcanology"],
+    "correct": 1
+  },
+  {
+    "id": 38,
+    "question": "Who wrote 'Pride and Prejudice'?",
+    "options": ["Charlotte Bronte", "Jane Austen", "Emily Dickinson", "Virginia Woolf"],
+    "correct": 1
+  },
+  {
+    "id": 39,
+    "question": "What is the currency of the United Kingdom?",
+    "options": ["Euro", "Pound Sterling", "Dollar", "Franc"],
+    "correct": 1
+  },
+  {
+    "id": 40,
+    "question": "Which blood type is known as the universal donor?",
+    "options": ["A", "B", "AB", "O"],
+    "correct": 3
+  },
+  {
+    "id": 41,
+    "question": "What is the largest continent by area?",
+    "options": ["Africa", "Asia", "North America", "Europe"],
+    "correct": 1
+  },
+  {
+    "id": 42,
+    "question": "Who invented the light bulb?",
+    "options": ["Thomas Edison", "Nikola Tesla", "Benjamin Franklin", "Alexander Graham Bell"],
+    "correct": 0
+  },
+  {
+    "id": 43,
+    "question": "What is the capital of Brazil?",
+    "options": ["Rio de Janeiro", "Brasilia", "Sao Paulo", "Salvador"],
+    "correct": 1
+  },
+  {
+    "id": 44,
+    "question": "Which element has the atomic number 1?",
+    "options": ["Helium", "Hydrogen", "Lithium", "Carbon"],
+    "correct": 1
+  },
+  {
+    "id": 45,
+    "question": "What is the most abundant gas in the universe?",
+    "options": ["Oxygen", "Helium", "Hydrogen", "Nitrogen"],
+    "correct": 2
+  },
+  {
+    "id": 46,
+    "question": "Who wrote 'To Kill a Mockingbird'?",
+    "options": ["Harper Lee", "John Steinbeck", "F. Scott Fitzgerald", "Ernest Hemingway"],
+    "correct": 0
+  },
+  {
+    "id": 47,
+    "question": "What is the largest island in the world?",
+    "options": ["Madagascar", "Greenland", "New Guinea", "Borneo"],
+    "correct": 1
+  },
+  {
+    "id": 48,
+    "question": "Which scientist developed the laws of motion?",
+    "options": ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Johannes Kepler"],
+    "correct": 1
+  },
+  {
+    "id": 49,
+    "question": "What is the deepest ocean trench?",
+    "options": ["Puerto Rico Trench", "Mariana Trench", "Java Trench", "Peru-Chile Trench"],
+    "correct": 1
+  },
+  {
+    "id": 50,
+    "question": "Who composed 'Moonlight Sonata'?",
+    "options": ["Mozart", "Beethoven", "Chopin", "Bach"],
+    "correct": 1
+  },
+  {
+    "id": 51,
+    "question": "What is the capital of Egypt?",
+    "options": ["Alexandria", "Cairo", "Luxor", "Giza"],
+    "correct": 1
+  },
+  {
+    "id": 52,
+    "question": "Which vitamin is produced when skin is exposed to sunlight?",
+    "options": ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin E"],
+    "correct": 2
+  },
+  {
+    "id": 53,
+    "question": "What is the fastest land animal?",
+    "options": ["Lion", "Cheetah", "Leopard", "Gazelle"],
+    "correct": 1
+  },
+  {
+    "id": 54,
+    "question": "Which country is known as the Land of the Rising Sun?",
+    "options": ["China", "Japan", "South Korea", "Thailand"],
+    "correct": 1
+  },
+  {
+    "id": 55,
+    "question": "What is the main ingredient in guacamole?",
+    "options": ["Tomato", "Avocado", "Onion", "Pepper"],
+    "correct": 1
+  },
+  {
+    "id": 56,
+    "question": "Who painted the ceiling of the Sistine Chapel?",
+    "options": ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"],
+    "correct": 1
+  },
+  {
+    "id": 57,
+    "question": "What is the largest planet in our solar system?",
+    "options": ["Saturn", "Jupiter", "Neptune", "Uranus"],
+    "correct": 1
+  },
+  {
+    "id": 58,
+    "question": "Which language has the most native speakers worldwide?",
+    "options": ["English", "Mandarin Chinese", "Spanish", "Hindi"],
+    "correct": 1
+  },
+  {
+    "id": 59,
+    "question": "What is the chemical symbol for gold?",
+    "options": ["Go", "Au", "Gd", "Ag"],
+    "correct": 1
+  },
+  {
+    "id": 60,
+    "question": "Who was the first woman to win a Nobel Prize?",
+    "options": ["Marie Curie", "Dorothy Hodgkin", "Barbara McClintock", "Lise Meitner"],
+    "correct": 0
+  },
+  {
+    "id": 61,
+    "question": "What is the capital of Russia?",
+    "options": ["St. Petersburg", "Moscow", "Kiev", "Minsk"],
+    "correct": 1
+  },
+  {
+    "id": 62,
+    "question": "Which organ is responsible for filtering blood in the human body?",
+    "options": ["Liver", "Kidney", "Spleen", "Lung"],
+    "correct": 1
+  },
+  {
+    "id": 63,
+    "question": "What is the smallest bone in the human body?",
+    "options": ["Stapes", "Malleus", "Incus", "Radius"],
+    "correct": 0
+  },
+  {
+    "id": 64,
+    "question": "Which war was fought between the North and South in America?",
+    "options": ["World War I", "American Civil War", "Revolutionary War", "War of 1812"],
+    "correct": 1
+  },
+  {
+    "id": 65,
+    "question": "What is the most spoken language in South America?",
+    "options": ["Spanish", "Portuguese", "English", "French"],
+    "correct": 0
+  },
+  {
+    "id": 66,
+    "question": "Who discovered penicillin?",
+    "options": ["Louis Pasteur", "Alexander Fleming", "Marie Curie", "Joseph Lister"],
+    "correct": 1
+  },
+  {
+    "id": 67,
+    "question": "What is the capital of Italy?",
+    "options": ["Milan", "Rome", "Venice", "Florence"],
+    "correct": 1
+  },
+  {
+    "id": 68,
+    "question": "Which mathematician is famous for the theorem a² + b² = c²?",
+    "options": ["Euclid", "Pythagoras", "Archimedes", "Aristotle"],
+    "correct": 1
+  },
+  {
+    "id": 69,
+    "question": "What is the largest lake in the world by surface area?",
+    "options": ["Lake Superior", "Caspian Sea", "Lake Victoria", "Lake Huron"],
+    "correct": 1
+  },
+  {
+    "id": 70,
+    "question": "Who wrote 'The Great Gatsby'?",
+    "options": ["Ernest Hemingway", "F. Scott Fitzgerald", "John Steinbeck", "William Faulkner"],
+    "correct": 1
+  },
+  {
+    "id": 71,
+    "question": "What is the process by which plants make their own food?",
+    "options": ["Respiration", "Photosynthesis", "Transpiration", "Germination"],
+    "correct": 1
+  },
+  {
+    "id": 72,
+    "question": "Which country is both in Europe and Asia?",
+    "options": ["Russia", "Turkey", "Kazakhstan", "All of the above"],
+    "correct": 3
+  },
+  {
+    "id": 73,
+    "question": "What is the study of stars and celestial objects called?",
+    "options": ["Geology", "Biology", "Astronomy", "Chemistry"],
+    "correct": 2
+  },
+  {
+    "id": 74,
+    "question": "Who was the first person to circumnavigate the globe?",
+    "options": ["Christopher Columbus", "Ferdinand Magellan", "Vasco da Gama", "James Cook"],
+    "correct": 1
+  },
+  {
+    "id": 75,
+    "question": "What is the most abundant element in Earth's crust?",
+    "options": ["Silicon", "Oxygen", "Aluminum", "Iron"],
+    "correct": 1
+  },
+  {
+    "id": 76,
+    "question": "Which ancient wonder of the world was located in Alexandria?",
+    "options": ["Hanging Gardens", "Lighthouse of Alexandria", "Colossus of Rhodes", "Statue of Zeus"],
+    "correct": 1
+  },
+  {
+    "id": 77,
+    "question": "What is the capital of Spain?",
+    "options": ["Barcelona", "Madrid", "Seville", "Valencia"],
+    "correct": 1
+  },
+  {
+    "id": 78,
+    "question": "Which scientist proposed the theory of relativity?",
+    "options": ["Isaac Newton", "Albert Einstein", "Stephen Hawking", "Niels Bohr"],
+    "correct": 1
+  },
+  {
+    "id": 79,
+    "question": "What is the longest bone in the human body?",
+    "options": ["Tibia", "Femur", "Humerus", "Radius"],
+    "correct": 1
+  },
+  {
+    "id": 80,
+    "question": "Which ocean is the smallest?",
+    "options": ["Indian Ocean", "Arctic Ocean", "Atlantic Ocean", "Southern Ocean"],
+    "correct": 1
+  },
+  {
+    "id": 81,
+    "question": "Who painted 'Girl with a Pearl Earring'?",
+    "options": ["Rembrandt", "Johannes Vermeer", "Vincent van Gogh", "Peter Paul Rubens"],
+    "correct": 1
+  },
+  {
+    "id": 82,
+    "question": "What is the currency of China?",
+    "options": ["Yen", "Won", "Yuan", "Rupee"],
+    "correct": 2
+  },
+  {
+    "id": 83,
+    "question": "Which planet has the most moons?",
+    "options": ["Jupiter", "Saturn", "Uranus", "Neptune"],
+    "correct": 1
+  },
+  {
+    "id": 84,
+    "question": "What is the main gas found in the air we breathe?",
+    "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Argon"],
+    "correct": 1
+  },
+  {
+    "id": 85,
+    "question": "Who wrote 'One Hundred Years of Solitude'?",
+    "options": ["Pablo Neruda", "Gabriel Garcia Marquez", "Mario Vargas Llosa", "Octavio Paz"],
+    "correct": 1
+  },
+  {
+    "id": 86,
+    "question": "What is the capital of Germany?",
+    "options": ["Munich", "Berlin", "Hamburg", "Frankfurt"],
+    "correct": 1
+  },
+  {
+    "id": 87,
+    "question": "Which blood type is known as the universal recipient?",
+    "options": ["A", "B", "AB", "O"],
+    "correct": 2
+  },
+  {
+    "id": 88,
+    "question": "What is the hardest rock?",
+    "options": ["Granite", "Quartz", "Diamond", "Marble"],
+    "correct": 2
+  },
+  {
+    "id": 89,
+    "question": "Who composed 'The Magic Flute'?",
+    "options": ["Mozart", "Beethoven", "Bach", "Vivaldi"],
+    "correct": 0
+  },
+  {
+    "id": 90,
+    "question": "What is the largest country in South America?",
+    "options": ["Argentina", "Brazil", "Peru", "Colombia"],
+    "correct": 1
+  },
+  {
+    "id": 91,
+    "question": "Which vitamin deficiency causes scurvy?",
+    "options": ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"],
+    "correct": 2
+  },
+  {
+    "id": 92,
+    "question": "What is the capital of South Korea?",
+    "options": ["Busan", "Seoul", "Incheon", "Daegu"],
+    "correct": 1
+  },
+  {
+    "id": 93,
+    "question": "Who discovered the structure of DNA?",
+    "options": ["Watson and Crick", "Mendel", "Darwin", "Fleming"],
+    "correct": 0
+  },
+  {
+    "id": 94,
+    "question": "What is the most common blood type?",
+    "options": ["A", "B", "AB", "O"],
+    "correct": 3
+  },
+  {
+    "id": 95,
+    "question": "Which country invented paper?",
+    "options": ["Egypt", "China", "India", "Greece"],
+    "correct": 1
+  },
+  {
+    "id": 96,
+    "question": "What is the study of fungi called?",
+    "options": ["Botany", "Mycology", "Zoology", "Ecology"],
+    "correct": 1
+  },
+  {
+    "id": 97,
+    "question": "Who was the first emperor of Rome?",
+    "options": ["Julius Caesar", "Augustus", "Nero", "Caligula"],
+    "correct": 1
+  },
+  {
+    "id": 98,
+    "question": "What is the freezing point of water in Celsius?",
+    "options": ["0°C", "32°C", "-1°C", "1°C"],
+    "correct": 0
+  },
+  {
+    "id": 99,
+    "question": "Which musical instrument has 88 keys?",
+    "options": ["Organ", "Piano", "Harpsichord", "Accordion"],
+    "correct": 1
+  },
+  {
+    "id": 100,
+    "question": "What is the largest rainforest in the world?",
+    "options": ["Congo Rainforest", "Amazon Rainforest", "Boreal Forest", "Daintree Rainforest"],
+    "correct": 1
+  }
+]
