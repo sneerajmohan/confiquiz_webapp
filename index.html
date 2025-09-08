@@ -446,15 +446,28 @@
             const total = currentValues.reduce((sum, val) => sum + val, 0);
             const totalSpan = document.getElementById('total');
             const totalDisplay = document.getElementById('totalDisplay');
+            const submitBtn = document.getElementById('submitBtn');
             
             totalSpan.textContent = `${total}%`;
             
             if (total === 100) {
                 totalDisplay.className = 'total-display total-valid';
-                document.getElementById('submitBtn').disabled = false;
+                submitBtn.disabled = false;
+                
+                // Also update Telegram's main button
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.MainButton.enable();
+                    window.Telegram.WebApp.MainButton.color = '#007AFF';
+                }
             } else {
                 totalDisplay.className = 'total-display total-invalid';
-                document.getElementById('submitBtn').disabled = true;
+                submitBtn.disabled = true;
+                
+                // Also update Telegram's main button
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.MainButton.disable();
+                    window.Telegram.WebApp.MainButton.color = '#cccccc';
+                }
             }
         }
         
@@ -466,14 +479,64 @@
         }
         
         function submitAnswer() {
+            console.log('Submit button clicked');
+            console.log('Current values:', currentValues);
+            
             const answers = {};
             currentValues.forEach((value, index) => {
                 answers[index] = value;
             });
             
-            // Send data back to Telegram bot
-            window.Telegram.WebApp.sendData(JSON.stringify(answers));
-            window.Telegram.WebApp.close();
+            console.log('Submitting answers:', answers);
+            
+            // Validate total is 100%
+            const total = currentValues.reduce((sum, val) => sum + val, 0);
+            console.log('Total percentage:', total);
+            
+            if (Math.abs(total - 100) > 0.01) {
+                alert(`Total must be 100%! Current total: ${total}%`);
+                return;
+            }
+            
+            try {
+                // Check if Telegram WebApp is available
+                if (typeof window.Telegram === 'undefined') {
+                    console.error('window.Telegram is undefined');
+                    alert('Error: Telegram WebApp not loaded. Please try text input: A=30 B=40 C=20 D=10');
+                    return;
+                }
+                
+                if (!window.Telegram.WebApp) {
+                    console.error('window.Telegram.WebApp is undefined');
+                    alert('Error: Telegram WebApp not available. Please try text input: A=30 B=40 C=20 D=10');
+                    return;
+                }
+                
+                console.log('Telegram WebApp available, sending data...');
+                console.log('WebApp sendData function:', typeof window.Telegram.WebApp.sendData);
+                
+                // Send data back to Telegram bot
+                const dataString = JSON.stringify(answers);
+                console.log('Sending data string:', dataString);
+                
+                window.Telegram.WebApp.sendData(dataString);
+                console.log('Data sent successfully via sendData()');
+                
+                // Show success message
+                document.getElementById('submitBtn').textContent = '✅ Submitted!';
+                document.getElementById('submitBtn').disabled = true;
+                
+                // Close the web app after a short delay
+                setTimeout(() => {
+                    console.log('Closing WebApp...');
+                    window.Telegram.WebApp.close();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error submitting answer:', error);
+                console.error('Error stack:', error.stack);
+                alert('Error submitting answer: ' + error.message + '\nPlease try text input: A=30 B=40 C=20 D=10');
+            }
         }
         
         // Timer functionality
