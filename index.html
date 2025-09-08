@@ -75,7 +75,7 @@
 
     // Parse URLSearchParams
     const urlParams = new URLSearchParams(location.search);
-    const urlQ = urlParams.get('q'); // global DB index of the question (used only to load the question)
+    const urlQ = urlParams.get('q'); // global DB index of the question
     const urlT = urlParams.get('t');
 
     // Parse start_param when launched via startapp deep-link (optional)
@@ -162,7 +162,7 @@
     function updateValue(idx, val){
       val = clamp(val);
       currentValues[idx] = val;
-      // No auto-calculation for D; all four are user-controlled.
+      // All four are user-controlled.
       syncInputs();
     }
 
@@ -184,7 +184,13 @@
       if (total !== 100 || timeRemaining <= 0) return;
 
       submitting = true;
-      const payload = {"0": currentValues[0], "1": currentValues[1], "2": currentValues[2], "3": currentValues[3]};
+      const payload = {
+        "__q": qIndex,                // <-- important for mapping early answers
+        "0": currentValues[0],
+        "1": currentValues[1],
+        "2": currentValues[2],
+        "3": currentValues[3]
+      };
       try {
         if (tg) {
           tg.sendData(JSON.stringify(payload));   // delivered to the bot as WEB_APP_DATA
