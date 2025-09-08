@@ -29,13 +29,12 @@
   <div class="card">
     <div id="outsideWarn" class="warn" style="display:none">
       Looks like this page isn’t opened as a Telegram Web App. You can still practice here, but
-      <b>Submit</b> won’t send back to the bot. Open via the bot’s button or the
-      <i>Answer with sliders</i> link.
+      <b>Submit</b> won’t send back to the bot. Open via the bot’s button in DM.
     </div>
 
     <h1 id="qtitle">ConfiQuiz</h1>
-    <div id="qmeta" class="muted">Loading question…</div>
-    <div id="qtext" style="margin-top:4px"></div>
+    <div id="qmeta" class="muted"></div>
+    <div id="qtext" style="margin-top:4px">Loading question…</div>
     <div id="opts" class="opts"></div>
 
     <div class="row">
@@ -55,13 +54,13 @@
     </div>
     <div class="row">
       <div>D</div>
-      <input id="slider3" type="range" min="0" max="100" step="1" disabled />
-      <input id="input3" type="number" min="0" max="100" disabled />
+      <input id="slider3" type="range" min="0" max="100" step="1" />
+      <input id="input3" type="number" min="0" max="100" />
     </div>
 
     <div class="total">Total: <span id="totalv">100</span>%</div>
     <div class="timer">⏱️ Time left: <span id="tleft">60</span>s</div>
-    <div class="tip">D is auto-calculated as <code>100 − (A + B + C)</code>. Submit only works when total is exactly 100%.</div>
+    <div class="tip">Adjust all four options so the total equals <b>100%</b>, then submit.</div>
 
     <div class="actions">
       <button id="submitBtn" title="Sends to the bot via sendData">Submit</button>
@@ -76,23 +75,17 @@
 
     // Parse URLSearchParams
     const urlParams = new URLSearchParams(location.search);
-    const urlQ = urlParams.get('q');
+    const urlQ = urlParams.get('q'); // global DB index of the question (used only to load the question)
     const urlT = urlParams.get('t');
 
-    // Parse start_param when launched via startapp deep-link
+    // Parse start_param when launched via startapp deep-link (optional)
     function parseStartParam(sp) {
-      // Accept formats like: "q=12&t=55" or "q:12,t:55"
       if (!sp) return {};
       try {
-        // try querystring first
         const maybeQs = new URLSearchParams(sp);
         if (maybeQs.has('q') || maybeQs.has('t')) {
-          return {
-            q: maybeQs.get('q'),
-            t: maybeQs.get('t')
-          };
+          return { q: maybeQs.get('q'), t: maybeQs.get('t') };
         }
-        // fallback: split by , and : or =
         const out = {};
         sp.split(',').forEach(pair => {
           const [k, v] = pair.split(/[:=]/);
@@ -140,33 +133,36 @@
     let currentValues = [25,25,25,25];
 
     // Helpers
-    function clamp(x){ x = parseInt(x ?? 0, 10); return isFinite(x) ? Math.max(0, Math.min(100, x)) : 0; }
+    function clamp(x){
+      x = parseInt(x ?? 0, 10);
+      return isFinite(x) ? Math.max(0, Math.min(100, x)) : 0;
+    }
     function escapeHTML(s){
       return String(s).replace(/[&<>"']/g, c => (
         { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
       ));
     }
 
-    function renderQuestion(q, index, total) {
-      qtitle.textContent = `ConfiQuiz – Question ${index+1}`;
-      qmeta.textContent  = `Question index in DB: ${index+1}/${total}`;
+    function renderQuestion(q) {
+      qtitle.textContent = 'ConfiQuiz';
+      qmeta.textContent  = ''; // no DB index shown
       qtext.innerHTML    = `❓ <b>${escapeHTML(q.question)}</b>`;
       const labels = ['A','B','C','D'];
       optsEl.innerHTML = labels.map((L,i)=> `${L}. ${escapeHTML(q.options[i])}`).join('<br/>');
     }
 
     function syncInputs(){
-      for (let i=0;i<4;i++){ sliders[i].value = currentValues[i]; inputs[i].value = currentValues[i]; }
+      for (let i=0;i<4;i++){
+        sliders[i].value = currentValues[i];
+        inputs[i].value  = currentValues[i];
+      }
       updateTotal();
     }
 
     function updateValue(idx, val){
       val = clamp(val);
       currentValues[idx] = val;
-      if (idx !== 3) { // recompute D
-        const sumABC = currentValues[0] + currentValues[1] + currentValues[2];
-        currentValues[3] = clamp(100 - sumABC);
-      }
+      // No auto-calculation for D; all four are user-controlled.
       syncInputs();
     }
 
@@ -220,12 +216,10 @@
     }
 
     // Events
-    sliders[0].addEventListener('input', e=> updateValue(0, e.target.value));
-    sliders[1].addEventListener('input', e=> updateValue(1, e.target.value));
-    sliders[2].addEventListener('input', e=> updateValue(2, e.target.value));
-    inputs[0].addEventListener('input', e=> updateValue(0, e.target.value));
-    inputs[1].addEventListener('input', e=> updateValue(1, e.target.value));
-    inputs[2].addEventListener('input', e=> updateValue(2, e.target.value));
+    for (let i=0;i<4;i++){
+      sliders[i].addEventListener('input', e=> updateValue(i, e.target.value));
+      inputs[i].addEventListener('input',  e=> updateValue(i, e.target.value));
+    }
     submitBtn.addEventListener('click', submitAnswer);
     if (tg) tg.onEvent('mainButtonClicked', submitAnswer);
     resetBtn.addEventListener('click', resetAll);
@@ -244,7 +238,7 @@
         const res = await fetch('questions.json', { cache: 'no-store' });
         const data = await res.json();
         const idx = Number.isFinite(qIndex) && qIndex >= 0 && qIndex < data.length ? qIndex : 0;
-        renderQuestion(data[idx], idx, data.length);
+        renderQuestion(data[idx]);
       } catch (e) {
         qmeta.innerHTML = '<span class="danger">Failed to load questions.json</span>';
         qtext.textContent = e.message;
