@@ -1,584 +1,258 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConfiQuiz</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            padding: 16px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .timer {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--tg-theme-button-color, #007AFF);
-            margin-bottom: 10px;
-        }
-        
-        .question-container {
-            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .question {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: var(--tg-theme-text-color, #000000);
-            line-height: 1.4;
-        }
-        
-        .confidence-guide {
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #666);
-            padding: 10px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            border-radius: 8px;
-        }
-        
-        .option {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            border-radius: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
-        }
-        
-        .option:hover {
-            border-color: var(--tg-theme-button-color, #007AFF);
-        }
-        
-        .option-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .option-label {
-            font-weight: bold;
-            font-size: 16px;
-            margin-right: 10px;
-            min-width: 25px;
-            color: var(--tg-theme-button-color, #007AFF);
-        }
-        
-        .option-text {
-            flex: 1;
-            font-size: 15px;
-            color: var(--tg-theme-text-color, #000000);
-            line-height: 1.3;
-        }
-        
-        .input-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        
-        .percentage-input {
-            width: 70px;
-            padding: 10px 8px;
-            border: 2px solid var(--tg-theme-button-color, #007AFF);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            transition: all 0.2s ease;
-        }
-        
-        .percentage-input:focus {
-            outline: none;
-            border-color: var(--tg-theme-button-color, #007AFF);
-            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
-            transform: scale(1.05);
-        }
-        
-        .percentage-symbol {
-            font-weight: bold;
-            color: var(--tg-theme-hint-color, #666);
-        }
-        
-        .slider-container {
-            flex: 1;
-            margin: 0 10px;
-        }
-        
-        .slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: #e0e0e0;
-            outline: none;
-            -webkit-appearance: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--tg-theme-button-color, #007AFF);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: all 0.2s ease;
-        }
-        
-        .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        
-        .slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--tg-theme-button-color, #007AFF);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .quick-buttons {
-            display: flex;
-            gap: 5px;
-        }
-        
-        .quick-btn {
-            padding: 6px 10px;
-            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border: 1px solid var(--tg-theme-button-color, #007AFF);
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--tg-theme-button-color, #007AFF);
-        }
-        
-        .quick-btn:hover {
-            background: var(--tg-theme-button-color, #007AFF);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-        
-        .total-display {
-            text-align: center;
-            margin: 25px 0;
-            padding: 20px;
-            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
-            border-radius: 12px;
-            font-size: 20px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .total-valid { 
-            color: #28a745; 
-            border: 2px solid #28a745;
-        }
-        
-        .total-invalid { 
-            color: #dc3545; 
-            border: 2px solid #dc3545;
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-reset {
-            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            color: var(--tg-theme-text-color, #000000);
-            border: 2px solid var(--tg-theme-hint-color, #999);
-        }
-        
-        .btn-reset:hover {
-            background: var(--tg-theme-hint-color, #999);
-            color: #ffffff;
-        }
-        
-        .btn-submit {
-            background: var(--tg-theme-button-color, #007AFF);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-submit:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: #ccc;
-        }
-        
-        .btn-submit:not(:disabled):hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
-        }
-        
-        .btn-submit:not(:disabled):active {
-            transform: translateY(0);
-        }
-        
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            background: var(--tg-theme-button-color, #007AFF);
-            transition: width 1s linear;
-            z-index: 1000;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>ConfiQuiz – Sliders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Telegram Mini App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root { --radius: 14px; --border: #e5e7eb; --muted: #6b7280; }
+    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; }
+    .card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px; max-width:640px; margin:0 auto; }
+    h1 { font-size:18px; margin:0 0 6px; }
+    .muted { color: var(--muted); }
+    .opts { line-height:1.6; margin:8px 0 14px; }
+    .row { display:grid; grid-template-columns:28px 1fr 72px; gap:10px; align-items:center; margin:12px 0; }
+    input[type="range"] { width:100%; }
+    input[type="number"] { width:72px; padding:8px; border:1px solid var(--border); border-radius:8px; }
+    .total,.timer { font-weight:600; margin-top:8px; }
+    .tip { margin-top:4px; font-size:13px; color: var(--muted); }
+    button { padding:10px 16px; border-radius:10px; border:1px solid var(--border); background:#f3f4f6; font-weight:600; cursor:pointer; }
+    .actions { display:flex; gap:10px; margin-top:12px; }
+    .danger { color:#b91c1c; }
+    .warn { background:#fff3cd; border:1px solid #ffe69c; padding:8px; border-radius:10px; margin-bottom:10px; }
+    code { background:#f3f4f6; padding:0 6px; border-radius:6px; }
+  </style>
 </head>
 <body>
-    <div class="progress-bar" id="progressBar"></div>
-    
-    <div class="container">
-        <div class="header">
-            <div class="timer">
-                ⏱️ Time remaining: <span id="countdown">60</span> seconds
-            </div>
-        </div>
-        
-        <div class="question-container fade-in">
-            <div class="question" id="questionText">
-                ❓ Loading question...
-            </div>
-            
-            <div class="confidence-guide">
-                😟 Low Confidence ← Set your confidence level → High Confidence 😊
-            </div>
-            
-            <div id="optionsContainer">
-                <!-- Options will be dynamically generated -->
-            </div>
-        </div>
-        
-        <div class="total-display" id="totalDisplay">
-            Total: <span id="total">100%</span>
-        </div>
-        
-        <div class="controls">
-            <button class="btn btn-reset" id="resetBtn">
-                🔄 Reset (25% each)
-            </button>
-            <button class="btn btn-submit" id="submitBtn">
-                ✅ Submit Answer
-            </button>
-        </div>
+  <div class="card">
+    <div id="outsideWarn" class="warn" style="display:none">
+      Looks like this page isn’t opened as a Telegram Web App. You can still practice here, but
+      <b>Submit</b> won’t send back to the bot. Open via the bot’s button or the
+      <i>Answer with sliders</i> link.
     </div>
-    
-    <script>
-        // Initialize Telegram Web App
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
-        
-        // Questions data (you can make this dynamic)
-        const QUESTIONS = [
-            {
-                question: "Who is known as the 'Father of Computers'?",
-                options: ["Alan Turing", "Charles Babbage", "John von Neumann", "Bill Gates"]
-            },
-            {
-                question: "Who was the first President of the United States?",
-                options: ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"]
-            },
-            {
-                question: "Who is known as the 'Father of the Nation' in India?",
-                options: ["Jawaharlal Nehru", "Mahatma Gandhi", "Subhash Chandra Bose", "Sardar Patel"]
-            },
-            {
-                question: "What is the capital of France?",
-                options: ["London", "Berlin", "Paris", "Rome"]
-            },
-            {
-                question: "Which planet is known as the 'Red Planet'?",
-                options: ["Venus", "Mars", "Jupiter", "Saturn"]
-            }
-        ];
-        
-        let timeRemaining = 60;
-        let currentValues = [25, 25, 25, 25];
-        let questionIndex = 0;
-        
-        // Get question index from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const qParam = urlParams.get('q');
-        if (qParam !== null) {
-            questionIndex = parseInt(qParam);
+
+    <h1 id="qtitle">ConfiQuiz</h1>
+    <div id="qmeta" class="muted">Loading question…</div>
+    <div id="qtext" style="margin-top:4px"></div>
+    <div id="opts" class="opts"></div>
+
+    <div class="row">
+      <div>A</div>
+      <input id="slider0" type="range" min="0" max="100" step="1" />
+      <input id="input0" type="number" min="0" max="100" />
+    </div>
+    <div class="row">
+      <div>B</div>
+      <input id="slider1" type="range" min="0" max="100" step="1" />
+      <input id="input1" type="number" min="0" max="100" />
+    </div>
+    <div class="row">
+      <div>C</div>
+      <input id="slider2" type="range" min="0" max="100" step="1" />
+      <input id="input2" type="number" min="0" max="100" />
+    </div>
+    <div class="row">
+      <div>D</div>
+      <input id="slider3" type="range" min="0" max="100" step="1" disabled />
+      <input id="input3" type="number" min="0" max="100" disabled />
+    </div>
+
+    <div class="total">Total: <span id="totalv">100</span>%</div>
+    <div class="timer">⏱️ Time left: <span id="tleft">60</span>s</div>
+    <div class="tip">D is auto-calculated as <code>100 − (A + B + C)</code>. Submit only works when total is exactly 100%.</div>
+
+    <div class="actions">
+      <button id="submitBtn" title="Sends to the bot via sendData">Submit</button>
+      <button id="resetBtn" type="button">Reset 25% each</button>
+    </div>
+  </div>
+
+  <script>
+    // Telegram SDK
+    const tg = window.Telegram?.WebApp || null;
+    if (tg) tg.expand();
+
+    // Parse URLSearchParams
+    const urlParams = new URLSearchParams(location.search);
+    const urlQ = urlParams.get('q');
+    const urlT = urlParams.get('t');
+
+    // Parse start_param when launched via startapp deep-link
+    function parseStartParam(sp) {
+      // Accept formats like: "q=12&t=55" or "q:12,t:55"
+      if (!sp) return {};
+      try {
+        // try querystring first
+        const maybeQs = new URLSearchParams(sp);
+        if (maybeQs.has('q') || maybeQs.has('t')) {
+          return {
+            q: maybeQs.get('q'),
+            t: maybeQs.get('t')
+          };
         }
-        
-        function initializeQuestion() {
-            const question = QUESTIONS[questionIndex] || QUESTIONS[0];
-            document.getElementById('questionText').textContent = `❓ ${question.question}`;
-            
-            const container = document.getElementById('optionsContainer');
-            container.innerHTML = '';
-            
-            question.options.forEach((option, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'option fade-in';
-                optionDiv.style.animationDelay = `${index * 0.1}s`;
-                
-                optionDiv.innerHTML = `
-                    <div class="option-header">
-                        <div class="option-label">${String.fromCharCode(65 + index)}:</div>
-                        <div class="option-text">${option}</div>
-                    </div>
-                    <div class="input-container">
-                        <input type="number" class="percentage-input" id="input${index}" 
-                               min="0" max="100" value="25">
-                        <span class="percentage-symbol">%</span>
-                        <div class="slider-container">
-                            <input type="range" class="slider" id="slider${index}" 
-                                   min="0" max="100" value="25">
-                        </div>
-                        <div class="quick-buttons">
-                            <button class="quick-btn" onclick="quickSet(${index}, 0)">0</button>
-                            <button class="quick-btn" onclick="quickSet(${index}, 50)">50</button>
-                            <button class="quick-btn" onclick="quickSet(${index}, 100)">100</button>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(optionDiv);
-            });
-            
-            // Add event listeners
-            for (let i = 0; i < 4; i++) {
-                const input = document.getElementById(`input${i}`);
-                const slider = document.getElementById(`slider${i}`);
-                
-                input.addEventListener('input', () => updateValue(i, input.value));
-                slider.addEventListener('input', () => updateValue(i, slider.value));
-            }
+        // fallback: split by , and : or =
+        const out = {};
+        sp.split(',').forEach(pair => {
+          const [k, v] = pair.split(/[:=]/);
+          if (k && v) out[k.trim()] = v.trim();
+        });
+        return out;
+      } catch (_) { return {}; }
+    }
+
+    const startParam = tg?.initDataUnsafe?.start_param || null;
+    const sp = parseStartParam(startParam);
+
+    const qIndex = Number.isFinite(+urlQ) ? +urlQ :
+                   Number.isFinite(+sp.q)   ? +sp.q  : 0;
+
+    let timeRemaining = Number.isFinite(+urlT) ? +urlT :
+                        Number.isFinite(+sp.t)   ? +sp.t  : 60;
+
+    // DOM refs
+    const outsideWarn = document.getElementById('outsideWarn');
+    const qtitle = document.getElementById('qtitle');
+    const qmeta  = document.getElementById('qmeta');
+    const qtext  = document.getElementById('qtext');
+    const optsEl = document.getElementById('opts');
+    const totalv = document.getElementById('totalv');
+    const tleft  = document.getElementById('tleft');
+
+    const sliders = [
+      document.getElementById('slider0'),
+      document.getElementById('slider1'),
+      document.getElementById('slider2'),
+      document.getElementById('slider3'),
+    ];
+    const inputs = [
+      document.getElementById('input0'),
+      document.getElementById('input1'),
+      document.getElementById('input2'),
+      document.getElementById('input3'),
+    ];
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn  = document.getElementById('resetBtn');
+
+    // State
+    let submitting = false;
+    let currentValues = [25,25,25,25];
+
+    // Helpers
+    function clamp(x){ x = parseInt(x ?? 0, 10); return isFinite(x) ? Math.max(0, Math.min(100, x)) : 0; }
+    function escapeHTML(s){
+      return String(s).replace(/[&<>"']/g, c => (
+        { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
+      ));
+    }
+
+    function renderQuestion(q, index, total) {
+      qtitle.textContent = `ConfiQuiz – Question ${index+1}`;
+      qmeta.textContent  = `Question index in DB: ${index+1}/${total}`;
+      qtext.innerHTML    = `❓ <b>${escapeHTML(q.question)}</b>`;
+      const labels = ['A','B','C','D'];
+      optsEl.innerHTML = labels.map((L,i)=> `${L}. ${escapeHTML(q.options[i])}`).join('<br/>');
+    }
+
+    function syncInputs(){
+      for (let i=0;i<4;i++){ sliders[i].value = currentValues[i]; inputs[i].value = currentValues[i]; }
+      updateTotal();
+    }
+
+    function updateValue(idx, val){
+      val = clamp(val);
+      currentValues[idx] = val;
+      if (idx !== 3) { // recompute D
+        const sumABC = currentValues[0] + currentValues[1] + currentValues[2];
+        currentValues[3] = clamp(100 - sumABC);
+      }
+      syncInputs();
+    }
+
+    function updateTotal(){
+      const total = currentValues.reduce((a,b)=>a+b,0);
+      totalv.textContent = total;
+      const ok = (total === 100);
+      submitBtn.disabled = !ok || timeRemaining <= 0;
+      if (tg) {
+        tg.MainButton.setText('✅ Submit');
+        if (ok && timeRemaining > 0) { tg.MainButton.show(); tg.MainButton.enable(); }
+        else { tg.MainButton.show(); tg.MainButton.disable(); }
+      }
+    }
+
+    function submitAnswer(){
+      if (submitting) return;
+      const total = currentValues.reduce((a,b)=>a+b,0);
+      if (total !== 100 || timeRemaining <= 0) return;
+
+      submitting = true;
+      const payload = {"0": currentValues[0], "1": currentValues[1], "2": currentValues[2], "3": currentValues[3]};
+      try {
+        if (tg) {
+          tg.sendData(JSON.stringify(payload));   // delivered to the bot as WEB_APP_DATA
+          tg.close();
+        } else {
+          alert('Not inside Telegram. Payload:\n' + JSON.stringify(payload));
+          submitting = false;
         }
-        
-        function updateValue(index, value) {
-            value = Math.max(0, Math.min(100, parseInt(value) || 0));
-            currentValues[index] = value;
-            
-            // Update both input and slider
-            document.getElementById(`input${index}`).value = value;
-            document.getElementById(`slider${index}`).value = value;
-            
-            updateTotal();
-        }
-        
-        function quickSet(index, value) {
-            updateValue(index, value);
-        }
-        
-        function updateTotal() {
-            const total = currentValues.reduce((sum, val) => sum + val, 0);
-            const totalSpan = document.getElementById('total');
-            const totalDisplay = document.getElementById('totalDisplay');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            totalSpan.textContent = `${total}%`;
-            
-            if (total === 100) {
-                totalDisplay.className = 'total-display total-valid';
-                submitBtn.disabled = false;
-                
-                // Also update Telegram's main button
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.MainButton.enable();
-                    window.Telegram.WebApp.MainButton.color = '#007AFF';
-                }
-            } else {
-                totalDisplay.className = 'total-display total-invalid';
-                submitBtn.disabled = true;
-                
-                // Also update Telegram's main button
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.MainButton.disable();
-                    window.Telegram.WebApp.MainButton.color = '#cccccc';
-                }
-            }
-        }
-        
-        function resetValues() {
-            currentValues = [25, 25, 25, 25];
-            for (let i = 0; i < 4; i++) {
-                updateValue(i, 25);
-            }
-        }
-        
-        function submitAnswer() {
-            console.log('Submit button clicked');
-            console.log('Current values:', currentValues);
-            
-            const answers = {};
-            currentValues.forEach((value, index) => {
-                answers[index] = value;
-            });
-            
-            console.log('Submitting answers:', answers);
-            
-            // Validate total is 100%
-            const total = currentValues.reduce((sum, val) => sum + val, 0);
-            console.log('Total percentage:', total);
-            
-            if (Math.abs(total - 100) > 0.01) {
-                alert(`Total must be 100%! Current total: ${total}%`);
-                return;
-            }
-            
-            try {
-                // Check if Telegram WebApp is available
-                if (typeof window.Telegram === 'undefined') {
-                    console.error('window.Telegram is undefined');
-                    alert('Error: Telegram WebApp not loaded. Please try text input: A=30 B=40 C=20 D=10');
-                    return;
-                }
-                
-                if (!window.Telegram.WebApp) {
-                    console.error('window.Telegram.WebApp is undefined');
-                    alert('Error: Telegram WebApp not available. Please try text input: A=30 B=40 C=20 D=10');
-                    return;
-                }
-                
-                console.log('Telegram WebApp available, sending data...');
-                console.log('WebApp sendData function:', typeof window.Telegram.WebApp.sendData);
-                
-                // Send data back to Telegram bot
-                const dataString = JSON.stringify(answers);
-                console.log('Sending data string:', dataString);
-                
-                window.Telegram.WebApp.sendData(dataString);
-                console.log('Data sent successfully via sendData()');
-                
-                // Show success message
-                document.getElementById('submitBtn').textContent = '✅ Submitted!';
-                document.getElementById('submitBtn').disabled = true;
-                
-                // Close the web app after a short delay
-                setTimeout(() => {
-                    console.log('Closing WebApp...');
-                    window.Telegram.WebApp.close();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error submitting answer:', error);
-                console.error('Error stack:', error.stack);
-                alert('Error submitting answer: ' + error.message + '\nPlease try text input: A=30 B=40 C=20 D=10');
-            }
-        }
-        
-        // Timer functionality
-        function updateTimer() {
-            const progressBar = document.getElementById('progressBar');
-            const countdown = document.getElementById('countdown');
-            
-            const progress = ((60 - timeRemaining) / 60) * 100;
-            progressBar.style.width = `${progress}%`;
-            
-            countdown.textContent = timeRemaining;
-            
-            if (timeRemaining <= 10) {
-                countdown.style.color = '#dc3545';
-                countdown.parentElement.classList.add('pulse');
-            }
-            
-            if (timeRemaining <= 0) {
-                document.getElementById('submitBtn').disabled = true;
-                countdown.textContent = "Time's up!";
-                countdown.style.color = '#dc3545';
-                return;
-            }
-            
-            timeRemaining--;
-            setTimeout(updateTimer, 1000);
-        }
-        
-        // Event listeners
-        document.getElementById('resetBtn').addEventListener('click', resetValues);
-        document.getElementById('submitBtn').addEventListener('click', submitAnswer);
-        
-        // Initialize
-        initializeQuestion();
-        updateTotal();
-        updateTimer();
-        
-        // Set Telegram theme
-        document.documentElement.style.setProperty('--tg-theme-bg-color', window.Telegram.WebApp.backgroundColor);
-        document.documentElement.style.setProperty('--tg-theme-text-color', window.Telegram.WebApp.textColor);
-        document.documentElement.style.setProperty('--tg-theme-button-color', window.Telegram.WebApp.buttonColor);
-        document.documentElement.style.setProperty('--tg-theme-button-text-color', window.Telegram.WebApp.buttonTextColor);
-    </script>
+      } catch (e) {
+        submitting = false;
+        alert('Failed to submit: ' + e.message);
+      }
+    }
+
+    function tick(){
+      tleft.textContent = Math.max(0, timeRemaining);
+      if (timeRemaining <= 0) {
+        submitBtn.disabled = true;
+        if (tg) tg.MainButton.disable();
+        return;
+      }
+      timeRemaining -= 1;
+      setTimeout(tick, 1000);
+    }
+
+    function resetAll(){
+      currentValues = [25,25,25,25];
+      syncInputs();
+    }
+
+    // Events
+    sliders[0].addEventListener('input', e=> updateValue(0, e.target.value));
+    sliders[1].addEventListener('input', e=> updateValue(1, e.target.value));
+    sliders[2].addEventListener('input', e=> updateValue(2, e.target.value));
+    inputs[0].addEventListener('input', e=> updateValue(0, e.target.value));
+    inputs[1].addEventListener('input', e=> updateValue(1, e.target.value));
+    inputs[2].addEventListener('input', e=> updateValue(2, e.target.value));
+    submitBtn.addEventListener('click', submitAnswer);
+    if (tg) tg.onEvent('mainButtonClicked', submitAnswer);
+    resetBtn.addEventListener('click', resetAll);
+
+    // Init
+    (async function init(){
+      // Warn if not opened inside Telegram
+      if (!tg) outsideWarn.style.display = 'block';
+
+      // initial values
+      syncInputs();
+      tleft.textContent = timeRemaining;
+
+      // load DB
+      try {
+        const res = await fetch('questions.json', { cache: 'no-store' });
+        const data = await res.json();
+        const idx = Number.isFinite(qIndex) && qIndex >= 0 && qIndex < data.length ? qIndex : 0;
+        renderQuestion(data[idx], idx, data.length);
+      } catch (e) {
+        qmeta.innerHTML = '<span class="danger">Failed to load questions.json</span>';
+        qtext.textContent = e.message;
+      }
+
+      // start countdown
+      tick();
+    })();
+  </script>
 </body>
 </html>
