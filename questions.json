@@ -6,6 +6,606 @@
     "correct": 1
   },
   {
+    "id": 101,
+    "question": "What is the largest organ in the human body?",
+    "options": ["Liver", "Brain", "Skin", "Lungs"],
+    "correct": 2
+  },
+  {
+    "id": 102,
+    "question": "Which country hosted the first modern Olympic Games?",
+    "options": ["France", "Greece", "England", "Germany"],
+    "correct": 1
+  },
+  {
+    "id": 103,
+    "question": "What is the chemical symbol for iron?",
+    "options": ["Ir", "Fe", "In", "Fr"],
+    "correct": 1
+  },
+  {
+    "id": 104,
+    "question": "Who wrote 'Don Quixote'?",
+    "options": ["Miguel de Cervantes", "Federico Garcia Lorca", "Pablo Neruda", "Jorge Luis Borges"],
+    "correct": 0
+  },
+  {
+    "id": 105,
+    "question": "What is the capital of Thailand?",
+    "options": ["Bangkok", "Chiang Mai", "Phuket", "Pattaya"],
+    "correct": 0
+  },
+  {
+    "id": 106,
+    "question": "Which gas is most responsible for global warming?",
+    "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Methane"],
+    "correct": 2
+  },
+  {
+    "id": 107,
+    "question": "Who painted 'The Persistence of Memory'?",
+    "options": ["Pablo Picasso", "Salvador Dali", "Joan Miro", "Francisco Goya"],
+    "correct": 1
+  },
+  {
+    "id": 108,
+    "question": "What is the smallest planet in our solar system?",
+    "options": ["Mercury", "Venus", "Mars", "Pluto"],
+    "correct": 0
+  },
+  {
+    "id": 109,
+    "question": "Which empire was ruled by Julius Caesar?",
+    "options": ["Greek Empire", "Roman Empire", "Persian Empire", "Byzantine Empire"],
+    "correct": 1
+  },
+  {
+    "id": 110,
+    "question": "What is the study of weather called?",
+    "options": ["Geology", "Meteorology", "Oceanography", "Climatology"],
+    "correct": 1
+  },
+  {
+    "id": 111,
+    "question": "Who composed 'Swan Lake'?",
+    "options": ["Stravinsky", "Tchaikovsky", "Prokofiev", "Rachmaninoff"],
+    "correct": 1
+  },
+  {
+    "id": 112,
+    "question": "What is the longest mountain range in the world?",
+    "options": ["Himalayas", "Rocky Mountains", "Andes", "Alps"],
+    "correct": 2
+  },
+  {
+    "id": 113,
+    "question": "Which philosopher wrote 'The Republic'?",
+    "options": ["Aristotle", "Plato", "Socrates", "Pythagoras"],
+    "correct": 1
+  },
+  {
+    "id": 114,
+    "question": "What is the currency of India?",
+    "options": ["Rupiah", "Rupee", "Rial", "Rand"],
+    "correct": 1
+  },
+  {
+    "id": 115,
+    "question": "Which bird is known for its ability to mimic human speech?",
+    "options": ["Eagle", "Parrot", "Owl", "Hawk"],
+    "correct": 1
+  },
+  {
+    "id": 116,
+    "question": "What is the boiling point of water at sea level?",
+    "options": ["90°C", "95°C", "100°C", "105°C"],
+    "correct": 2
+  },
+  {
+    "id": 117,
+    "question": "Who invented the World Wide Web?",
+    "options": ["Bill Gates", "Steve Jobs", "Tim Berners-Lee", "Mark Zuckerberg"],
+    "correct": 2
+  },
+  {
+    "id": 118,
+    "question": "What is the capital of Argentina?",
+    "options": ["Cordoba", "Buenos Aires", "Rosario", "Mendoza"],
+    "correct": 1
+  },
+  {
+    "id": 119,
+    "question": "Which hormone regulates blood sugar levels?",
+    "options": ["Adrenaline", "Insulin", "Cortisol", "Thyroxine"],
+    "correct": 1
+  },
+  {
+    "id": 120,
+    "question": "What is the largest volcano in the world?",
+    "options": ["Mount Vesuvius", "Mount Fuji", "Mauna Loa", "Mount Etna"],
+    "correct": 2
+  },
+  {
+    "id": 121,
+    "question": "Who wrote 'War and Peace'?",
+    "options": ["Fyodor Dostoevsky", "Leo Tolstoy", "Anton Chekhov", "Ivan Turgenev"],
+    "correct": 1
+  },
+  {
+    "id": 122,
+    "question": "What is the most abundant metal in Earth's crust?",
+    "options": ["Iron", "Aluminum", "Copper", "Zinc"],
+    "correct": 1
+  },
+  {
+    "id": 123,
+    "question": "Which country is known as the Land of Fire and Ice?",
+    "options": ["Norway", "Iceland", "Finland", "Greenland"],
+    "correct": 1
+  },
+  {
+    "id": 124,
+    "question": "What is the study of insects called?",
+    "options": ["Entomology", "Ornithology", "Ichthyology", "Herpetology"],
+    "correct": 0
+  },
+  {
+    "id": 125,
+    "question": "Who painted 'The Last Supper'?",
+    "options": ["Michelangelo", "Leonardo da Vinci", "Raphael", "Caravaggio"],
+    "correct": 1
+  },
+  {
+    "id": 126,
+    "question": "What is the capital of Nigeria?",
+    "options": ["Lagos", "Abuja", "Kano", "Ibadan"],
+    "correct": 1
+  },
+  {
+    "id": 127,
+    "question": "Which planet is known as the Evening Star?",
+    "options": ["Mars", "Venus", "Jupiter", "Mercury"],
+    "correct": 1
+  },
+  {
+    "id": 128,
+    "question": "What is the process of a caterpillar becoming a butterfly called?",
+    "options": ["Evolution", "Metamorphosis", "Transformation", "Development"],
+    "correct": 1
+  },
+  {
+    "id": 129,
+    "question": "Who discovered gravity?",
+    "options": ["Galileo Galilei", "Isaac Newton", "Johannes Kepler", "Albert Einstein"],
+    "correct": 1
+  },
+  {
+    "id": 130,
+    "question": "What is the largest freshwater lake in the world?",
+    "options": ["Lake Superior", "Lake Baikal", "Lake Victoria", "Great Bear Lake"],
+    "correct": 0
+  },
+  {
+    "id": 131,
+    "question": "Which composer wrote 'The Nutcracker'?",
+    "options": ["Mozart", "Beethoven", "Tchaikovsky", "Brahms"],
+    "correct": 2
+  },
+  {
+    "id": 132,
+    "question": "What is the hardest natural mineral?",
+    "options": ["Quartz", "Diamond", "Sapphire", "Emerald"],
+    "correct": 1
+  },
+  {
+    "id": 133,
+    "question": "Which country has the longest coastline?",
+    "options": ["Russia", "Canada", "Norway", "Chile"],
+    "correct": 1
+  },
+  {
+    "id": 134,
+    "question": "What is the study of the mind and behavior called?",
+    "options": ["Sociology", "Psychology", "Anthropology", "Philosophy"],
+    "correct": 1
+  },
+  {
+    "id": 135,
+    "question": "Who wrote 'The Catcher in the Rye'?",
+    "options": ["J.D. Salinger", "Harper Lee", "John Steinbeck", "F. Scott Fitzgerald"],
+    "correct": 0
+  },
+  {
+    "id": 136,
+    "question": "What is the capital of Turkey?",
+    "options": ["Istanbul", "Ankara", "Izmir", "Bursa"],
+    "correct": 1
+  },
+  {
+    "id": 137,
+    "question": "Which organ produces bile?",
+    "options": ["Stomach", "Liver", "Gallbladder", "Pancreas"],
+    "correct": 1
+  },
+  {
+    "id": 138,
+    "question": "What is the fastest fish in the ocean?",
+    "options": ["Tuna", "Marlin", "Sailfish", "Shark"],
+    "correct": 2
+  },
+  {
+    "id": 139,
+    "question": "Who was the first woman in space?",
+    "options": ["Sally Ride", "Valentina Tereshkova", "Mae Jemison", "Eileen Collins"],
+    "correct": 1
+  },
+  {
+    "id": 140,
+    "question": "What is the largest bird in the world?",
+    "options": ["Eagle", "Ostrich", "Emu", "Condor"],
+    "correct": 1
+  },
+  {
+    "id": 141,
+    "question": "Which scientist developed the periodic table?",
+    "options": ["Antoine Lavoisier", "Dmitri Mendeleev", "Marie Curie", "John Dalton"],
+    "correct": 1
+  },
+  {
+    "id": 142,
+    "question": "What is the capital of Morocco?",
+    "options": ["Casablanca", "Rabat", "Marrakech", "Fez"],
+    "correct": 1
+  },
+  {
+    "id": 143,
+    "question": "Which vitamin helps with blood clotting?",
+    "options": ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin K"],
+    "correct": 3
+  },
+  {
+    "id": 144,
+    "question": "What is the most common element in the universe?",
+    "options": ["Helium", "Hydrogen", "Oxygen", "Carbon"],
+    "correct": 1
+  },
+  {
+    "id": 145,
+    "question": "Who painted 'Guernica'?",
+    "options": ["Salvador Dali", "Pablo Picasso", "Joan Miro", "Francisco Goya"],
+    "correct": 1
+  },
+  {
+    "id": 146,
+    "question": "What is the largest cave system in the world?",
+    "options": ["Mammoth Cave", "Son Doong Cave", "Carlsbad Caverns", "Jewel Cave"],
+    "correct": 0
+  },
+  {
+    "id": 147,
+    "question": "Which ancient civilization built Machu Picchu?",
+    "options": ["Maya", "Aztec", "Inca", "Olmec"],
+    "correct": 2
+  },
+  {
+    "id": 148,
+    "question": "What is the study of earthquakes called?",
+    "options": ["Volcanology", "Seismology", "Geology", "Meteorology"],
+    "correct": 1
+  },
+  {
+    "id": 149,
+    "question": "Who composed 'The Marriage of Figaro'?",
+    "options": ["Mozart", "Beethoven", "Bach", "Handel"],
+    "correct": 0
+  },
+  {
+    "id": 150,
+    "question": "What is the capital of Chile?",
+    "options": ["Valparaiso", "Santiago", "Concepcion", "Antofagasta"],
+    "correct": 1
+  },
+  {
+    "id": 151,
+    "question": "Which blood component is responsible for oxygen transport?",
+    "options": ["Plasma", "Platelets", "Red blood cells", "White blood cells"],
+    "correct": 2
+  },
+  {
+    "id": 152,
+    "question": "What is the deepest lake in the world?",
+    "options": ["Lake Superior", "Lake Baikal", "Crater Lake", "Lake Tanganyika"],
+    "correct": 1
+  },
+  {
+    "id": 153,
+    "question": "Who wrote 'Brave New World'?",
+    "options": ["George Orwell", "Aldous Huxley", "Ray Bradbury", "H.G. Wells"],
+    "correct": 1
+  },
+  {
+    "id": 154,
+    "question": "What is the largest waterfall in the world by volume?",
+    "options": ["Niagara Falls", "Victoria Falls", "Iguazu Falls", "Angel Falls"],
+    "correct": 2
+  },
+  {
+    "id": 155,
+    "question": "Which planet has the Great Red Spot?",
+    "options": ["Mars", "Jupiter", "Saturn", "Neptune"],
+    "correct": 1
+  },
+  {
+    "id": 156,
+    "question": "What is the study of plants called?",
+    "options": ["Zoology", "Botany", "Ecology", "Biology"],
+    "correct": 1
+  },
+  {
+    "id": 157,
+    "question": "Who was the first person to reach the South Pole?",
+    "options": ["Ernest Shackleton", "Roald Amundsen", "Robert Scott", "Edmund Hillary"],
+    "correct": 1
+  },
+  {
+    "id": 158,
+    "question": "What is the capital of Sweden?",
+    "options": ["Gothenburg", "Stockholm", "Malmo", "Uppsala"],
+    "correct": 1
+  },
+  {
+    "id": 159,
+    "question": "Which enzyme breaks down proteins?",
+    "options": ["Amylase", "Lipase", "Pepsin", "Lactase"],
+    "correct": 2
+  },
+  {
+    "id": 160,
+    "question": "What is the tallest building in the world?",
+    "options": ["Empire State Building", "Burj Khalifa", "Shanghai Tower", "CN Tower"],
+    "correct": 1
+  },
+  {
+    "id": 161,
+    "question": "Who painted 'The Scream'?",
+    "options": ["Vincent van Gogh", "Edvard Munch", "Paul Cezanne", "Claude Monet"],
+    "correct": 1
+  },
+  {
+    "id": 162,
+    "question": "What is the largest bay in the world?",
+    "options": ["Hudson Bay", "Bay of Bengal", "Gulf of Mexico", "Baffin Bay"],
+    "correct": 1
+  },
+  {
+    "id": 163,
+    "question": "Which scientist discovered radioactivity?",
+    "options": ["Marie Curie", "Henri Becquerel", "Ernest Rutherford", "Pierre Curie"],
+    "correct": 1
+  },
+  {
+    "id": 164,
+    "question": "What is the capital of South Africa?",
+    "options": ["Johannesburg", "Cape Town", "Pretoria", "Durban"],
+    "correct": 2
+  },
+  {
+    "id": 165,
+    "question": "Which mammal is known to have the most powerful bite?",
+    "options": ["Lion", "Shark", "Hippo", "Crocodile"],
+    "correct": 2
+  },
+  {
+    "id": 166,
+    "question": "What is the smallest country in Asia?",
+    "options": ["Singapore", "Maldives", "Bahrain", "Brunei"],
+    "correct": 1
+  },
+  {
+    "id": 167,
+    "question": "Who wrote 'Moby Dick'?",
+    "options": ["Mark Twain", "Herman Melville", "Nathaniel Hawthorne", "Edgar Allan Poe"],
+    "correct": 1
+  },
+  {
+    "id": 168,
+    "question": "What is the main component of natural gas?",
+    "options": ["Propane", "Methane", "Butane", "Ethane"],
+    "correct": 1
+  },
+  {
+    "id": 169,
+    "question": "Which composer wrote 'The Blue Danube'?",
+    "options": ["Mozart", "Strauss II", "Beethoven", "Brahms"],
+    "correct": 1
+  },
+  {
+    "id": 170,
+    "question": "What is the largest coral reef system in the world?",
+    "options": ["Belize Barrier Reef", "Great Barrier Reef", "Red Sea Coral Reef", "Caribbean Reef"],
+    "correct": 1
+  },
+  {
+    "id": 171,
+    "question": "Which hormone is known as the stress hormone?",
+    "options": ["Insulin", "Adrenaline", "Cortisol", "Thyroxine"],
+    "correct": 2
+  },
+  {
+    "id": 172,
+    "question": "What is the capital of Peru?",
+    "options": ["Cusco", "Lima", "Arequipa", "Trujillo"],
+    "correct": 1
+  },
+  {
+    "id": 173,
+    "question": "Which animal is known as the ship of the desert?",
+    "options": ["Horse", "Camel", "Elephant", "Donkey"],
+    "correct": 1
+  },
+  {
+    "id": 174,
+    "question": "What is the study of heredity called?",
+    "options": ["Biology", "Genetics", "Evolution", "Ecology"],
+    "correct": 1
+  },
+  {
+    "id": 175,
+    "question": "Who discovered the vaccine for polio?",
+    "options": ["Louis Pasteur", "Jonas Salk", "Alexander Fleming", "Edward Jenner"],
+    "correct": 1
+  },
+  {
+    "id": 176,
+    "question": "What is the largest moon in our solar system?",
+    "options": ["Europa", "Titan", "Ganymede", "Callisto"],
+    "correct": 2
+  },
+  {
+    "id": 177,
+    "question": "Which war was known as the Great War?",
+    "options": ["World War I", "World War II", "Napoleonic Wars", "American Civil War"],
+    "correct": 0
+  },
+  {
+    "id": 178,
+    "question": "What is the capital of Vietnam?",
+    "options": ["Ho Chi Minh City", "Hanoi", "Da Nang", "Hue"],
+    "correct": 1
+  },
+  {
+    "id": 179,
+    "question": "Which part of the brain controls balance?",
+    "options": ["Cerebrum", "Cerebellum", "Brain stem", "Thalamus"],
+    "correct": 1
+  },
+  {
+    "id": 180,
+    "question": "What is the fastest bird in flight?",
+    "options": ["Eagle", "Falcon", "Hawk", "Peregrine Falcon"],
+    "correct": 3
+  },
+  {
+    "id": 181,
+    "question": "Who painted 'Water Lilies'?",
+    "options": ["Pierre-Auguste Renoir", "Claude Monet", "Edgar Degas", "Paul Cezanne"],
+    "correct": 1
+  },
+  {
+    "id": 182,
+    "question": "What is the largest stadium in the world?",
+    "options": ["Wembley Stadium", "Camp Nou", "Rungrado Stadium", "Michigan Stadium"],
+    "correct": 2
+  },
+  {
+    "id": 183,
+    "question": "Which civilization built the pyramids of Giza?",
+    "options": ["Babylonians", "Egyptians", "Greeks", "Romans"],
+    "correct": 1
+  },
+  {
+    "id": 184,
+    "question": "What is the study of the oceans called?",
+    "options": ["Geology", "Meteorology", "Oceanography", "Hydrology"],
+    "correct": 2
+  },
+  {
+    "id": 185,
+    "question": "Who composed 'Carmen'?",
+    "options": ["Verdi", "Puccini", "Bizet", "Wagner"],
+    "correct": 2
+  },
+  {
+    "id": 186,
+    "question": "What is the capital of Malaysia?",
+    "options": ["George Town", "Kuala Lumpur", "Johor Bahru", "Ipoh"],
+    "correct": 1
+  },
+  {
+    "id": 187,
+    "question": "Which vitamin is essential for vision?",
+    "options": ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin E"],
+    "correct": 0
+  },
+  {
+    "id": 188,
+    "question": "What is the largest hot desert in the world?",
+    "options": ["Gobi Desert", "Sahara Desert", "Arabian Desert", "Kalahari Desert"],
+    "correct": 1
+  },
+  {
+    "id": 189,
+    "question": "Who wrote 'The Adventures of Tom Sawyer'?",
+    "options": ["Charles Dickens", "Mark Twain", "Lewis Carroll", "Louisa May Alcott"],
+    "correct": 1
+  },
+  {
+    "id": 190,
+    "question": "What is the most reactive metal?",
+    "options": ["Sodium", "Potassium", "Cesium", "Lithium"],
+    "correct": 2
+  },
+  {
+    "id": 191,
+    "question": "Which planet rotates on its side?",
+    "options": ["Neptune", "Uranus", "Saturn", "Jupiter"],
+    "correct": 1
+  },
+  {
+    "id": 192,
+    "question": "What is the study of ancient civilizations through artifacts?",
+    "options": ["Anthropology", "Archaeology", "History", "Paleontology"],
+    "correct": 1
+  },
+  {
+    "id": 193,
+    "question": "Who was the first person to climb Mount Everest?",
+    "options": ["George Mallory", "Edmund Hillary", "Reinhold Messner", "Junko Tabei"],
+    "correct": 1
+  },
+  {
+    "id": 194,
+    "question": "What is the capital of Norway?",
+    "options": ["Bergen", "Oslo", "Trondheim", "Stavanger"],
+    "correct": 1
+  },
+  {
+    "id": 195,
+    "question": "Which gland regulates metabolism?",
+    "options": ["Adrenal", "Thyroid", "Pituitary", "Pancreas"],
+    "correct": 1
+  },
+  {
+    "id": 196,
+    "question": "What is the longest river in Europe?",
+    "options": ["Danube", "Volga", "Rhine", "Dnieper"],
+    "correct": 1
+  },
+  {
+    "id": 197,
+    "question": "Who painted 'American Gothic'?",
+    "options": ["Grant Wood", "Edward Hopper", "Georgia O'Keeffe", "Norman Rockwell"],
+    "correct": 0
+  },
+  {
+    "id": 198,
+    "question": "What is the largest butterfly in the world?",
+    "options": ["Monarch", "Queen Alexandra's Birdwing", "Swallowtail", "Blue Morpho"],
+    "correct": 1
+  },
+  {
+    "id": 199,
+    "question": "Which ancient wonder was located in Babylon?",
+    "options": ["Lighthouse of Alexandria", "Hanging Gardens", "Colossus of Rhodes", "Mausoleum at Halicarnassus"],
+    "correct": 1
+  },
+  {
+    "id": 200,
+    "question": "What is the study of sound called?",
+    "options": ["Optics", "Acoustics", "Mechanics", "Thermodynamics"],
+    "correct": 1
+  },
+  {
     "id": 2,
     "question": "Who was the first President of the United States?",
     "options": ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
