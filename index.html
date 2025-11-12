@@ -7,7 +7,6 @@
   <style>
     :root { --radius: 14px; --border: #e5e7eb; --muted: #6b7280; }
     body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; }
-
     .card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px; max-width:640px; margin:0 auto; }
     h2 { font-size:18px; margin:0 0 6px; }
     .opts { line-height:1.6; margin:8px 0 14px; }
@@ -17,11 +16,14 @@
     button { padding:10px 16px; border-radius:10px; border:1px solid var(--border); background:#f3f4f6; font-weight:600; cursor:pointer; }
     .actions { display:flex; gap:10px; margin-top:12px; flex-wrap: wrap; }
     pre { background:#f3f4f6; padding:8px; border-radius:8px; font-size:13px; }
+    table { border-collapse:collapse; width:100%; margin-top:10px; font-size:14px; }
+    th, td { border:1px solid #e5e7eb; padding:6px 8px; text-align:left; }
+    th { background:#f3f4f6; }
   </style>
 </head>
 <body>
 
-  <div class="card">
+  <div class="card" id="quizCard">
     <h2 id="qtitle">ConfiQuiz</h2>
     <div id="qtext">Loading question…</div>
     <div id="opts" class="opts"></div>
@@ -35,26 +37,34 @@
     <div class="actions">
       <button id="submitBtn">Submit</button>
       <button id="resetBtn">Reset</button>
-      <button id="newSetBtn">New Question</button>
     </div>
 
     <div id="resultBox"></div>
   </div>
 
+  <div class="card" id="summaryCard" style="display:none;">
+    <h2>📊 Your Results</h2>
+    <div id="summaryBox"></div>
+  </div>
+
   <script>
     let QUESTIONS = [];
+    let quizSet = [];
     let currentValues = [25,25,25,25];
     let qIndex = 0;
+    let results = [];
 
     const sliders = [0,1,2,3].map(i => document.getElementById('slider'+i));
     const inputs = [0,1,2,3].map(i => document.getElementById('input'+i));
     const submitBtn = document.getElementById('submitBtn');
     const resetBtn = document.getElementById('resetBtn');
-    const newSetBtn = document.getElementById('newSetBtn');
     const qtext = document.getElementById('qtext');
     const optsEl = document.getElementById('opts');
     const totalv = document.getElementById('totalv');
     const resultBox = document.getElementById('resultBox');
+    const quizCard = document.getElementById('quizCard');
+    const summaryCard = document.getElementById('summaryCard');
+    const summaryBox = document.getElementById('summaryBox');
 
     function clamp(x){ x=parseInt(x??0,10); return isFinite(x)?Math.max(0,Math.min(100,x)):0; }
     function escapeHTML(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -62,12 +72,14 @@
     async function loadDB(){
       const res = await fetch('questions.json', { cache: 'no-store' });
       QUESTIONS = await res.json();
+      quizSet = QUESTIONS.sort(() => 0.5 - Math.random()).slice(0, 5); // pick 5 random
     }
 
     function renderQuestion(q){
       qtext.innerHTML = `❓ <b>${escapeHTML(q.question)}</b>`;
       const labels = ['A','B','C','D'];
       optsEl.innerHTML = labels.map((L,i)=>`${L}. ${escapeHTML(q.options[i])}`).join('<br>');
+      resultBox.innerHTML = '';
     }
 
     function syncInputs(){
@@ -79,23 +91,60 @@
 
     function updateValue(i,v){ currentValues[i]=clamp(v); syncInputs(); }
 
+    function scoreQuestion(correctIndex){
+      const p = currentValues[correctIndex] / 100;
+      if (p <= 0) return Infinity;
+      return -Math.log(p);
+    }
+
     function submitAnswer(){
-      const total=currentValues.reduce((a,b)=>a+b,0);
+      const total = currentValues.reduce((a,b)=>a+b,0);
       if(total!==100) return alert("Make sure total = 100%");
-      const payload = { question: QUESTIONS[qIndex].question, A:currentValues[0],B:currentValues[1],C:currentValues[2],D:currentValues[3] };
-      resultBox.innerHTML = "<b>Your probabilities:</b><pre>"+JSON.stringify(payload,null,2)+"</pre>";
+      const q = quizSet[qIndex];
+      const score = scoreQuestion(q.correct);
+      results.push({ question: q.question, correct: q.options[q.correct], userP: currentValues, score });
+
+      qIndex++;
+      if (qIndex < quizSet.length) {
+        resultBox.innerHTML = `<b>✅ Recorded!</b> Next question coming...`;
+        setTimeout(() => { renderQuestion(quizSet[qIndex]); resetAll(); }, 1000);
+      } else {
+        showSummary();
+      }
     }
 
     function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
-    function newQuestion(){ qIndex=Math.floor(Math.random()*QUESTIONS.length); renderQuestion(QUESTIONS[qIndex]); resetAll(); resultBox.innerHTML=''; }
+
+    function showSummary(){
+      quizCard.style.display = 'none';
+      summaryCard.style.display = 'block';
+
+      let totalScore = 0;
+      let rows = results.map((r,i)=>{
+        const scoreText = (r.score===Infinity) ? '∞' : r.score.toFixed(3);
+        totalScore += (r.score===Infinity) ? 0 : r.score;
+        return `<tr><td>${i+1}</td><td>${escapeHTML(r.question)}</td><td>${escapeHTML(r.correct)}</td><td>${scoreText}</td></tr>`;
+      }).join('');
+
+      const avg = results.every(r=>r.score===Infinity) ? '∞' :
+        (totalScore / results.length).toFixed(3);
+
+      summaryBox.innerHTML = `
+        <table>
+          <tr><th>#</th><th>Question</th><th>Correct Answer</th><th>Score</th></tr>
+          ${rows}
+        </table>
+        <p><b>Average Score:</b> ${avg}</p>
+        <button onclick="location.reload()">Restart</button>
+      `;
+    }
 
     sliders.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
     inputs.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
     submitBtn.addEventListener('click',submitAnswer);
     resetBtn.addEventListener('click',resetAll);
-    newSetBtn.addEventListener('click',newQuestion);
 
-    (async function init(){ await loadDB(); newQuestion(); })();
+    (async function init(){ await loadDB(); renderQuestion(quizSet[0]); resetAll(); })();
   </script>
 </body>
 </html>
