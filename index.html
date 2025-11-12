@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>ConfiQuiz – Practice Sliders</title>
+  <title>ConfiQuiz – Confidence Calibration Quiz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root { --radius: 14px; --border: #e5e7eb; --muted: #6b7280; }
-    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; }
+    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; line-height:1.6; }
+    a { color:#2563eb; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .intro { background:linear-gradient(180deg,#fff,#f8fafc); border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 6px 24px rgba(0,0,0,.05); padding:16px; max-width:640px; margin:0 auto 20px; }
+    .intro h1 { font-size:20px; margin-bottom:8px; }
+    .intro p { color:#374151; margin:6px 0; }
+    .intro code { background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+
     .card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px; max-width:640px; margin:0 auto; }
     h2 { font-size:18px; margin:0 0 6px; }
     .opts { line-height:1.6; margin:8px 0 14px; }
@@ -17,12 +24,30 @@
     .actions { display:flex; gap:10px; margin-top:12px; flex-wrap: wrap; }
     pre { background:#f3f4f6; padding:8px; border-radius:8px; font-size:13px; }
     table { border-collapse:collapse; width:100%; margin-top:10px; font-size:14px; }
-    th, td { border:1px solid #e5e7eb; padding:6px 8px; text-align:left; }
+    th, td { border:1px solid #e5e7eb; padding:6px 8px; text-align:left; vertical-align:top; }
     th { background:#f3f4f6; }
+    .muted { color: var(--muted); }
   </style>
 </head>
 <body>
 
+  <!-- Intro Section -->
+  <div class="intro">
+    <h1>ConfiQuiz 🧠</h1>
+    <p>
+      This is a quiz game that tests not only whether you're <b>correct</b>, but also <b>how confident</b> you are.  
+      For each multiple-choice question, distribute 100% probability among the four answers.
+    </p>
+    <p>
+      The score for each question is based on <b>−ln(p<sub>correct</sub>)</b>, inspired by <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence" target="_blank">KL Divergence</a>.  
+      Lower scores indicate better calibration — a perfect score (0.000) means you were 100% confident and correct.
+    </p>
+    <p class="muted">
+      Based on <a href="https://www.linkedin.com/posts/vanhoucke_when-i-was-at-stanford-there-was-a-professor-activity-7370087604651819008-Co2b" target="_blank">this post by Vincent Vanhoucke</a>.
+    </p>
+  </div>
+
+  <!-- Quiz -->
   <div class="card" id="quizCard">
     <h2 id="qtitle">ConfiQuiz</h2>
     <div id="qtext">Loading question…</div>
@@ -42,6 +67,7 @@
     <div id="resultBox"></div>
   </div>
 
+  <!-- Summary -->
   <div class="card" id="summaryCard" style="display:none;">
     <h2>📊 Your Results</h2>
     <div id="summaryBox"></div>
@@ -79,7 +105,7 @@
       qtext.innerHTML = `❓ <b>${escapeHTML(q.question)}</b>`;
       const labels = ['A','B','C','D'];
       optsEl.innerHTML = labels.map((L,i)=>`${L}. ${escapeHTML(q.options[i])}`).join('<br>');
-      resultBox.innerHTML = '';
+      resultBox.innerHTML = `<p><b>Question ${qIndex+1}</b> of ${quizSet.length}</p>`;
     }
 
     function syncInputs(){
@@ -102,12 +128,12 @@
       if(total!==100) return alert("Make sure total = 100%");
       const q = quizSet[qIndex];
       const score = scoreQuestion(q.correct);
-      results.push({ question: q.question, correct: q.options[q.correct], userP: currentValues, score });
+      results.push({ question: q.question, correct: q.options[q.correct], userP: [...currentValues], score });
 
       qIndex++;
       if (qIndex < quizSet.length) {
-        resultBox.innerHTML = `<b>✅ Recorded!</b> Next question coming...`;
-        setTimeout(() => { renderQuestion(quizSet[qIndex]); resetAll(); }, 1000);
+        resultBox.innerHTML = `<b>✅ Recorded!</b> Loading next question...`;
+        setTimeout(() => { renderQuestion(quizSet[qIndex]); resetAll(); }, 800);
       } else {
         showSummary();
       }
@@ -123,7 +149,18 @@
       let rows = results.map((r,i)=>{
         const scoreText = (r.score===Infinity) ? '∞' : r.score.toFixed(3);
         totalScore += (r.score===Infinity) ? 0 : r.score;
-        return `<tr><td>${i+1}</td><td>${escapeHTML(r.question)}</td><td>${escapeHTML(r.correct)}</td><td>${scoreText}</td></tr>`;
+        const probs = r.userP.map((p,j)=>`${['A','B','C','D'][j]}=${p}%`).join(', ');
+        const color = r.score === Infinity ? '#ef4444'
+                    : r.score < 0.2 ? '#22c55e'
+                    : r.score < 1 ? '#84cc16'
+                    : '#f97316';
+        return `<tr>
+          <td>${i+1}</td>
+          <td>${escapeHTML(r.question)}</td>
+          <td>${escapeHTML(r.correct)}</td>
+          <td>${escapeHTML(probs)}</td>
+          <td style="color:${color}; font-weight:600;">${scoreText}</td>
+        </tr>`;
       }).join('');
 
       const avg = results.every(r=>r.score===Infinity) ? '∞' :
@@ -131,11 +168,11 @@
 
       summaryBox.innerHTML = `
         <table>
-          <tr><th>#</th><th>Question</th><th>Correct Answer</th><th>Score</th></tr>
+          <tr><th>#</th><th>Question</th><th>Correct Answer</th><th>Your Confidence</th><th>Score</th></tr>
           ${rows}
         </table>
-        <p><b>Average Score:</b> ${avg}</p>
-        <button onclick="location.reload()">Restart</button>
+        <p><b>Average Score:</b> ${avg} (best possible: 0.0)</p>
+        <button onclick="location.reload()">🔁 Play Again</button>
       `;
     }
 
@@ -144,7 +181,7 @@
     submitBtn.addEventListener('click',submitAnswer);
     resetBtn.addEventListener('click',resetAll);
 
-    (async function init(){ await loadDB(); renderQuestion(quizSet[0]); resetAll(); })();
+    (async function init(){ await loadDB(); qIndex=0; renderQuestion(quizSet[qIndex]); resetAll(); })();
   </script>
 </body>
 </html>
