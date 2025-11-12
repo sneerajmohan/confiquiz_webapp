@@ -2,257 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>ConfiQuiz – Sliders</title>
+  <title>ConfiQuiz – Practice Sliders</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Telegram Mini App SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root { --radius: 14px; --border: #e5e7eb; --muted: #6b7280; }
     body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; }
+
     .card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px; max-width:640px; margin:0 auto; }
-    h1 { font-size:18px; margin:0 0 6px; }
-    .muted { color: var(--muted); }
+    h2 { font-size:18px; margin:0 0 6px; }
     .opts { line-height:1.6; margin:8px 0 14px; }
     .row { display:grid; grid-template-columns:28px 1fr 72px; gap:10px; align-items:center; margin:12px 0; }
     input[type="range"] { width:100%; }
     input[type="number"] { width:72px; padding:8px; border:1px solid var(--border); border-radius:8px; }
-    .total,.timer { font-weight:600; margin-top:8px; }
-    .tip { margin-top:4px; font-size:13px; color: var(--muted); }
     button { padding:10px 16px; border-radius:10px; border:1px solid var(--border); background:#f3f4f6; font-weight:600; cursor:pointer; }
-    .actions { display:flex; gap:10px; margin-top:12px; }
-    .danger { color:#b91c1c; }
-    .warn { background:#fff3cd; border:1px solid #ffe69c; padding:8px; border-radius:10px; margin-bottom:10px; }
-    code { background:#f3f4f6; padding:0 6px; border-radius:6px; }
+    .actions { display:flex; gap:10px; margin-top:12px; flex-wrap: wrap; }
+    pre { background:#f3f4f6; padding:8px; border-radius:8px; font-size:13px; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div id="outsideWarn" class="warn" style="display:none">
-      Looks like this page isn’t opened as a Telegram Web App. You can still practice here, but
-      <b>Submit</b> won’t send back to the bot. Open via the bot’s button in DM.
-    </div>
 
-    <h1 id="qtitle">ConfiQuiz</h1>
-    <div id="qmeta" class="muted"></div>
-    <div id="qtext" style="margin-top:4px">Loading question…</div>
+  <div class="card">
+    <h2 id="qtitle">ConfiQuiz</h2>
+    <div id="qtext">Loading question…</div>
     <div id="opts" class="opts"></div>
 
-    <div class="row">
-      <div>A</div>
-      <input id="slider0" type="range" min="0" max="100" step="1" />
-      <input id="input0" type="number" min="0" max="100" />
-    </div>
-    <div class="row">
-      <div>B</div>
-      <input id="slider1" type="range" min="0" max="100" step="1" />
-      <input id="input1" type="number" min="0" max="100" />
-    </div>
-    <div class="row">
-      <div>C</div>
-      <input id="slider2" type="range" min="0" max="100" step="1" />
-      <input id="input2" type="number" min="0" max="100" />
-    </div>
-    <div class="row">
-      <div>D</div>
-      <input id="slider3" type="range" min="0" max="100" step="1" />
-      <input id="input3" type="number" min="0" max="100" />
-    </div>
+    <div class="row"><div>A</div><input id="slider0" type="range" min="0" max="100"><input id="input0" type="number" min="0" max="100"></div>
+    <div class="row"><div>B</div><input id="slider1" type="range" min="0" max="100"><input id="input1" type="number" min="0" max="100"></div>
+    <div class="row"><div>C</div><input id="slider2" type="range" min="0" max="100"><input id="input2" type="number" min="0" max="100"></div>
+    <div class="row"><div>D</div><input id="slider3" type="range" min="0" max="100"><input id="input3" type="number" min="0" max="100"></div>
 
-    <div class="total">Total: <span id="totalv">100</span>%</div>
-    <div class="timer">⏱️ Time left: <span id="tleft">60</span>s</div>
-    <div class="tip">Adjust all four options so the total equals <b>100%</b>, then submit.</div>
-
+    <div>Total: <span id="totalv">100</span>%</div>
     <div class="actions">
-      <button id="submitBtn" title="Sends to the bot via sendData">Submit</button>
-      <button id="resetBtn" type="button">Reset 25% each</button>
+      <button id="submitBtn">Submit</button>
+      <button id="resetBtn">Reset</button>
+      <button id="newSetBtn">New Question</button>
     </div>
+
+    <div id="resultBox"></div>
   </div>
 
   <script>
-    // Telegram SDK
-    const tg = window.Telegram?.WebApp || null;
-    if (tg) tg.expand();
+    let QUESTIONS = [];
+    let currentValues = [25,25,25,25];
+    let qIndex = 0;
 
-    // Parse URLSearchParams
-    const urlParams = new URLSearchParams(location.search);
-    const urlQ = urlParams.get('q'); // global DB index of the question
-    const urlT = urlParams.get('t');
-
-    // Parse start_param when launched via startapp deep-link (optional)
-    function parseStartParam(sp) {
-      if (!sp) return {};
-      try {
-        const maybeQs = new URLSearchParams(sp);
-        if (maybeQs.has('q') || maybeQs.has('t')) {
-          return { q: maybeQs.get('q'), t: maybeQs.get('t') };
-        }
-        const out = {};
-        sp.split(',').forEach(pair => {
-          const [k, v] = pair.split(/[:=]/);
-          if (k && v) out[k.trim()] = v.trim();
-        });
-        return out;
-      } catch (_) { return {}; }
-    }
-
-    const startParam = tg?.initDataUnsafe?.start_param || null;
-    const sp = parseStartParam(startParam);
-
-    const qIndex = Number.isFinite(+urlQ) ? +urlQ :
-                   Number.isFinite(+sp.q)   ? +sp.q  : 0;
-
-    let timeRemaining = Number.isFinite(+urlT) ? +urlT :
-                        Number.isFinite(+sp.t)   ? +sp.t  : 60;
-
-    // DOM refs
-    const outsideWarn = document.getElementById('outsideWarn');
-    const qtitle = document.getElementById('qtitle');
-    const qmeta  = document.getElementById('qmeta');
-    const qtext  = document.getElementById('qtext');
+    const sliders = [0,1,2,3].map(i => document.getElementById('slider'+i));
+    const inputs = [0,1,2,3].map(i => document.getElementById('input'+i));
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const newSetBtn = document.getElementById('newSetBtn');
+    const qtext = document.getElementById('qtext');
     const optsEl = document.getElementById('opts');
     const totalv = document.getElementById('totalv');
-    const tleft  = document.getElementById('tleft');
+    const resultBox = document.getElementById('resultBox');
 
-    const sliders = [
-      document.getElementById('slider0'),
-      document.getElementById('slider1'),
-      document.getElementById('slider2'),
-      document.getElementById('slider3'),
-    ];
-    const inputs = [
-      document.getElementById('input0'),
-      document.getElementById('input1'),
-      document.getElementById('input2'),
-      document.getElementById('input3'),
-    ];
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn  = document.getElementById('resetBtn');
+    function clamp(x){ x=parseInt(x??0,10); return isFinite(x)?Math.max(0,Math.min(100,x)):0; }
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-    // State
-    let submitting = false;
-    let currentValues = [25,25,25,25];
-
-    // Helpers
-    function clamp(x){
-      x = parseInt(x ?? 0, 10);
-      return isFinite(x) ? Math.max(0, Math.min(100, x)) : 0;
-    }
-    function escapeHTML(s){
-      return String(s).replace(/[&<>"']/g, c => (
-        { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
-      ));
+    async function loadDB(){
+      const res = await fetch('questions.json', { cache: 'no-store' });
+      QUESTIONS = await res.json();
     }
 
-    function renderQuestion(q) {
-      qtitle.textContent = 'ConfiQuiz';
-      qmeta.textContent  = ''; // no DB index shown
-      qtext.innerHTML    = `❓ <b>${escapeHTML(q.question)}</b>`;
+    function renderQuestion(q){
+      qtext.innerHTML = `❓ <b>${escapeHTML(q.question)}</b>`;
       const labels = ['A','B','C','D'];
-      optsEl.innerHTML = labels.map((L,i)=> `${L}. ${escapeHTML(q.options[i])}`).join('<br/>');
+      optsEl.innerHTML = labels.map((L,i)=>`${L}. ${escapeHTML(q.options[i])}`).join('<br>');
     }
 
     function syncInputs(){
-      for (let i=0;i<4;i++){
-        sliders[i].value = currentValues[i];
-        inputs[i].value  = currentValues[i];
-      }
-      updateTotal();
-    }
-
-    function updateValue(idx, val){
-      val = clamp(val);
-      currentValues[idx] = val;
-      // All four are user-controlled.
-      syncInputs();
-    }
-
-    function updateTotal(){
+      for(let i=0;i<4;i++){ sliders[i].value=currentValues[i]; inputs[i].value=currentValues[i]; }
       const total = currentValues.reduce((a,b)=>a+b,0);
       totalv.textContent = total;
-      const ok = (total === 100);
-      submitBtn.disabled = !ok || timeRemaining <= 0;
-      if (tg) {
-        tg.MainButton.setText('✅ Submit');
-        if (ok && timeRemaining > 0) { tg.MainButton.show(); tg.MainButton.enable(); }
-        else { tg.MainButton.show(); tg.MainButton.disable(); }
-      }
+      submitBtn.disabled = (total!==100);
     }
+
+    function updateValue(i,v){ currentValues[i]=clamp(v); syncInputs(); }
 
     function submitAnswer(){
-      if (submitting) return;
-      const total = currentValues.reduce((a,b)=>a+b,0);
-      if (total !== 100 || timeRemaining <= 0) return;
-
-      submitting = true;
-      const payload = {
-        "__q": qIndex,                // <-- important for mapping early answers
-        "0": currentValues[0],
-        "1": currentValues[1],
-        "2": currentValues[2],
-        "3": currentValues[3]
-      };
-      try {
-        if (tg) {
-          tg.sendData(JSON.stringify(payload));   // delivered to the bot as WEB_APP_DATA
-          tg.close();
-        } else {
-          alert('Not inside Telegram. Payload:\n' + JSON.stringify(payload));
-          submitting = false;
-        }
-      } catch (e) {
-        submitting = false;
-        alert('Failed to submit: ' + e.message);
-      }
+      const total=currentValues.reduce((a,b)=>a+b,0);
+      if(total!==100) return alert("Make sure total = 100%");
+      const payload = { question: QUESTIONS[qIndex].question, A:currentValues[0],B:currentValues[1],C:currentValues[2],D:currentValues[3] };
+      resultBox.innerHTML = "<b>Your probabilities:</b><pre>"+JSON.stringify(payload,null,2)+"</pre>";
     }
 
-    function tick(){
-      tleft.textContent = Math.max(0, timeRemaining);
-      if (timeRemaining <= 0) {
-        submitBtn.disabled = true;
-        if (tg) tg.MainButton.disable();
-        return;
-      }
-      timeRemaining -= 1;
-      setTimeout(tick, 1000);
-    }
+    function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
+    function newQuestion(){ qIndex=Math.floor(Math.random()*QUESTIONS.length); renderQuestion(QUESTIONS[qIndex]); resetAll(); resultBox.innerHTML=''; }
 
-    function resetAll(){
-      currentValues = [25,25,25,25];
-      syncInputs();
-    }
+    sliders.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
+    inputs.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
+    submitBtn.addEventListener('click',submitAnswer);
+    resetBtn.addEventListener('click',resetAll);
+    newSetBtn.addEventListener('click',newQuestion);
 
-    // Events
-    for (let i=0;i<4;i++){
-      sliders[i].addEventListener('input', e=> updateValue(i, e.target.value));
-      inputs[i].addEventListener('input',  e=> updateValue(i, e.target.value));
-    }
-    submitBtn.addEventListener('click', submitAnswer);
-    if (tg) tg.onEvent('mainButtonClicked', submitAnswer);
-    resetBtn.addEventListener('click', resetAll);
-
-    // Init
-    (async function init(){
-      // Warn if not opened inside Telegram
-      if (!tg) outsideWarn.style.display = 'block';
-
-      // initial values
-      syncInputs();
-      tleft.textContent = timeRemaining;
-
-      // load DB
-      try {
-        const res = await fetch('questions.json', { cache: 'no-store' });
-        const data = await res.json();
-        const idx = Number.isFinite(qIndex) && qIndex >= 0 && qIndex < data.length ? qIndex : 0;
-        renderQuestion(data[idx]);
-      } catch (e) {
-        qmeta.innerHTML = '<span class="danger">Failed to load questions.json</span>';
-        qtext.textContent = e.message;
-      }
-
-      // start countdown
-      tick();
-    })();
+    (async function init(){ await loadDB(); newQuestion(); })();
   </script>
 </body>
 </html>
