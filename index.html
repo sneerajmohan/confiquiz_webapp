@@ -5,35 +5,110 @@
   <title>ConfiQuiz – Confidence Calibration Quiz</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root { --radius: 14px; --border: #e5e7eb; --muted: #6b7280; }
-    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; line-height:1.6; padding-bottom:60px; }
+    :root { 
+      --radius: 14px; 
+      --border: #e5e7eb; 
+      --muted: #6b7280; 
+      --maxw: 760px;
+    }
+
+    body { 
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; 
+      margin: 0; 
+      padding: 0 14px 80px; 
+      color:#111827; 
+      background:#f9fafb; 
+      line-height:1.65; 
+      display:flex; 
+      justify-content:center;
+    }
+
+    .container {
+      width:100%;
+      max-width:var(--maxw);
+      padding-top:18px;
+    }
+
     a { color:#2563eb; text-decoration:none; }
     a:hover { text-decoration:underline; }
 
-    .intro { background:linear-gradient(180deg,#fff,#f8fafc);
-             border:1px solid var(--border); border-radius:var(--radius);
-             box-shadow:0 6px 24px rgba(0,0,0,.05);
-             padding:16px; max-width:640px; margin:0 auto 20px; }
-    .intro h1 { font-size:20px; margin-bottom:8px; }
-    .intro p { color:#374151; margin:6px 0; }
+    /* Intro card */
+    .intro { 
+      background:linear-gradient(180deg,#fff,#f8fafc);
+      border:1px solid var(--border); 
+      border-radius:var(--radius);
+      box-shadow:0 4px 20px rgba(0,0,0,.04);
+      padding:18px 20px; 
+      margin-bottom:22px; 
+    }
+
+    .intro h1 { font-size:22px; margin:0 0 10px; }
+    .intro p { color:#374151; margin:10px 0; font-size:15px; }
     .intro code { background:#f3f4f6; padding:2px 6px; border-radius:6px; }
 
-    .card { background:#fff; border:1px solid var(--border); border-radius:var(--radius);
-            box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px; max-width:640px; margin:0 auto; }
-    h2 { font-size:18px; margin:0 0 6px; }
-    .opts { line-height:1.6; margin:8px 0 14px; }
-    .row { display:grid; grid-template-columns:28px 1fr 72px; gap:10px; align-items:center; margin:12px 0; }
+    /* Quiz & summary cards */
+    .card { 
+      background:#fff; 
+      border:1px solid var(--border); 
+      border-radius:var(--radius);
+      box-shadow:0 4px 20px rgba(0,0,0,.04); 
+      padding:18px 20px; 
+      margin-bottom:22px; 
+    }
+
+    h2 { font-size:19px; margin:0 0 6px; }
+
+    .opts { line-height:1.6; margin:8px 0 16px; }
+
+    /* Rows */
+    .row { 
+      display:grid; 
+      grid-template-columns:28px 1fr 72px; 
+      gap:10px; 
+      align-items:center; 
+      margin:12px 0; 
+    }
+
     input[type="range"] { width:100%; }
-    input[type="number"] { width:72px; padding:8px; border:1px solid var(--border); border-radius:8px; }
-    button { padding:10px 16px; border-radius:10px; border:1px solid var(--border);
-             background:#f3f4f6; font-weight:600; cursor:pointer; }
-    .actions { display:flex; gap:10px; margin-top:12px; flex-wrap: wrap; }
-    pre { background:#f3f4f6; padding:8px; border-radius:8px; font-size:13px; }
-    table { border-collapse:collapse; width:100%; margin-top:10px; font-size:14px; }
-    th, td { border:1px solid #e5e7eb; padding:6px 8px; text-align:left; vertical-align:top; }
+    input[type="number"] { 
+      width:72px; 
+      padding:8px; 
+      border:1px solid var(--border); 
+      border-radius:8px; 
+    }
+
+    button { 
+      padding:10px 16px; 
+      border-radius:10px; 
+      border:1px solid var(--border);
+      background:#f3f4f6; 
+      font-weight:600; 
+      cursor:pointer; 
+    }
+
+    .actions { display:flex; gap:12px; margin-top:14px; flex-wrap: wrap; }
+
+    pre { background:#f3f4f6; padding:10px; border-radius:8px; font-size:13px; }
+
+    table { 
+      border-collapse:collapse; 
+      width:100%; 
+      margin-top:12px; 
+      font-size:14px; 
+    }
+
+    th, td { 
+      border:1px solid #e5e7eb; 
+      padding:6px 8px; 
+      text-align:left; 
+      vertical-align:top; 
+    }
+
     th { background:#f3f4f6; }
+
     .muted { color: var(--muted); }
 
+    /* Footer */
     footer {
       position:fixed;
       bottom:0;
@@ -42,7 +117,7 @@
       background:#f9fafb;
       border-top:1px solid #e5e7eb;
       text-align:center;
-      padding:10px 0;
+      padding:12px 0;
       color:#6b7280;
       font-size:14px;
       backdrop-filter:blur(6px);
@@ -52,26 +127,34 @@
 </head>
 <body>
 
+<div class="container">
+
   <!-- Intro Section -->
   <div class="intro">
     <h1>ConfiQuiz 🧠</h1>
+
     <p>
-      This is a quiz game that tests not only whether you're <b>correct</b>, but also <b>how confident</b> you are.  
-      For each multiple-choice question, distribute 100% probability among the four answers.
+      This quiz tests not only whether you're <b>correct</b>, but also 
+      <b>how confident</b> you are.  
+      For each multiple-choice question, distribute <b>100%</b> probability among the four answers.
     </p>
+
     <p>
-      The score for each question is based on <b>−ln(p<sub>correct</sub>)</b>, inspired by 
+      Your score per question is based on 
+      <code>−ln(p<sub>correct</sub>)</code>, inspired by 
       <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence" target="_blank">KL Divergence</a>.  
-      Lower scores indicate better calibration — a perfect score (0.000) means you were 100% confident and correct.
+      Lower is better — a perfect score (<b>0.000</b>) means you were fully confident and correct.
     </p>
+
     <p class="muted">
-      Based on <a href="https://www.linkedin.com/posts/vanhoucke_when-i-was-at-stanford-there-was-a-professor-activity-7370087604651819008-Co2b" target="_blank">this post by Vincent Vanhoucke</a>.
+      Based on 
+      <a href="https://www.linkedin.com/posts/vanhoucke_when-i-was-at-stanford-there-was-a-professor-activity-7370087604651819008-Co2b" target="_blank">this post by Vincent Vanhoucke</a>.
     </p>
   </div>
 
   <!-- Quiz -->
   <div class="card" id="quizCard">
-    <h2 id="qtitle">ConfiQuiz</h2>
+    <h2>ConfiQuiz</h2>
     <div id="qtext">Loading question…</div>
     <div id="opts" class="opts"></div>
 
@@ -81,6 +164,7 @@
     <div class="row"><div>D</div><input id="slider3" type="range" min="0" max="100"><input id="input3" type="number" min="0" max="100"></div>
 
     <div>Total: <span id="totalv">100</span>%</div>
+
     <div class="actions">
       <button id="submitBtn">Submit</button>
       <button id="resetBtn">Reset</button>
@@ -95,152 +179,161 @@
     <div id="summaryBox"></div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    Made by <b>Neeraj</b>
-    <a href="https://www.linkedin.com/in/neeraj-mohan-s-5360a077/"
-       target="_blank"
-       style="text-decoration:none; margin-left:6px; vertical-align:middle;">
-      <svg xmlns="http://www.w3.org/2000/svg"
-           viewBox="0 0 24 24"
-           fill="#0a66c2"
-           width="18"
-           height="18"
-           style="vertical-align:middle;">
-        <path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8.34 19H5.67V9h2.67v10zM7 7.67c-.86 0-1.56-.7-1.56-1.56 0-.86.7-1.56 1.56-1.56.86 0 1.56.7 1.56 1.56 0 .86-.7 1.56-1.56 1.56zm12 11.33h-2.67v-4.79c0-1.14-.02-2.61-1.59-2.61-1.59 0-1.84 1.24-1.84 2.53v4.87H10.23V9h2.56v1.37h.04c.36-.68 1.25-1.39 2.58-1.39 2.76 0 3.27 1.82 3.27 4.19V19z"/>
-      </svg>
-    </a>
-  </footer>
+</div> <!-- end container -->
 
-  <script>
-    const SCORE_CAP = 100;   // << -------- 🔥 ADDED HERE
+<!-- Footer -->
+<footer>
+  Made by <b>Neeraj</b>
+  <a href="https://www.linkedin.com/in/neeraj-mohan-s-5360a077/" target="_blank"
+     style="text-decoration:none; margin-left:6px; vertical-align:middle;">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         fill="#0a66c2"
+         width="18"
+         height="18"
+         style="vertical-align:middle;">
+      <path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8.34 19H5.67V9h2.67v10zM7 7.67c-.86 0-1.56-.7-1.56-1.56 0-.86.7-1.56 1.56-1.56.86 0 1.56.7 1.56 1.56 0 .86-.7 1.56-1.56 1.56zm12 11.33h-2.67v-4.79c0-1.14-.02-2.61-1.59-2.61-1.59 0-1.84 1.24-1.84 2.53v4.87H10.23V9h2.56v1.37h.04c.36-.68 1.25-1.39 2.58-1.39 2.76 0 3.27 1.82 3.27 4.19V19z"/>
+    </svg>
+  </a>
+</footer>
 
-    let QUESTIONS = [];
-    let quizSet = [];
-    let currentValues = [25,25,25,25];
-    let qIndex = 0;
-    let results = [];
+<script>
+  let QUESTIONS = [];
+  let quizSet = [];
+  let currentValues = [25,25,25,25];
+  let qIndex = 0;
+  let results = [];
 
-    const sliders = [0,1,2,3].map(i => document.getElementById('slider'+i));
-    const inputs = [0,1,2,3].map(i => document.getElementById('input'+i));
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const qtext = document.getElementById('qtext');
-    const optsEl = document.getElementById('opts');
-    const totalv = document.getElementById('totalv');
-    const resultBox = document.getElementById('resultBox');
-    const quizCard = document.getElementById('quizCard');
-    const summaryCard = document.getElementById('summaryCard');
-    const summaryBox = document.getElementById('summaryBox');
+  const sliders = [0,1,2,3].map(i => document.getElementById('slider'+i));
+  const inputs = [0,1,2,3].map(i => document.getElementById('input'+i));
+  const submitBtn = document.getElementById('submitBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const qtext = document.getElementById('qtext');
+  const optsEl = document.getElementById('opts');
+  const totalv = document.getElementById('totalv');
+  const resultBox = document.getElementById('resultBox');
+  const quizCard = document.getElementById('quizCard');
+  const summaryCard = document.getElementById('summaryCard');
+  const summaryBox = document.getElementById('summaryBox');
 
-    function clamp(x){ x=parseInt(x??0,10); return isFinite(x)?Math.max(0,Math.min(100,x)):0; }
-    function escapeHTML(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function clamp(x){ x=parseInt(x??0,10); return isFinite(x)?Math.max(0,Math.min(100,x)):0; }
+  function escapeHTML(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-    async function loadDB(){
-      const res = await fetch('questions.json', { cache: 'no-store' });
-      QUESTIONS = await res.json();
-      quizSet = QUESTIONS.sort(() => 0.5 - Math.random()).slice(0, 5); // pick 5 random
+  async function loadDB(){
+    const res = await fetch('questions.json', { cache:'no-store' });
+    QUESTIONS = await res.json();
+    quizSet = QUESTIONS.sort(()=>0.5-Math.random()).slice(0,5);
+  }
+
+  function renderQuestion(q){
+    qtext.innerHTML = `❓ <b>${escapeHTML(q.question)}</b>`;
+    const labels = ['A','B','C','D'];
+    optsEl.innerHTML = labels.map((L,i)=>`${L}. ${escapeHTML(q.options[i])}`).join('<br>');
+    resultBox.innerHTML = `<p><b>Question ${qIndex+1}</b> of ${quizSet.length}</p>`;
+  }
+
+  function syncInputs(){
+    for(let i=0;i<4;i++){ sliders[i].value=currentValues[i]; inputs[i].value=currentValues[i]; }
+    const total = currentValues.reduce((a,b)=>a+b,0);
+    totalv.textContent = total;
+    submitBtn.disabled = (total!==100);
+  }
+
+  function updateValue(i,v){ currentValues[i]=clamp(v); syncInputs(); }
+
+  function scoreQuestion(correctIndex){
+    const p = currentValues[correctIndex] / 100;
+    if (p <= 0) return Infinity;
+    return -Math.log(p);
+  }
+
+  function submitAnswer(){
+    const total = currentValues.reduce((a,b)=>a+b,0);
+    if(total!==100) return alert("Make sure total = 100%");
+
+    const q = quizSet[qIndex];
+    const score = scoreQuestion(q.correct);
+
+    results.push({ 
+      question: q.question, 
+      correct: q.options[q.correct], 
+      userP: [...currentValues], 
+      score 
+    });
+
+    qIndex++;
+    if (qIndex < quizSet.length) {
+      resultBox.innerHTML = `<b>✅ Recorded!</b> Loading next question...`;
+      setTimeout(()=>{ renderQuestion(quizSet[qIndex]); resetAll(); }, 800);
+    } else {
+      showSummary();
     }
+  }
 
-    function renderQuestion(q){
-      qtext.innerHTML = `❓ <b>${escapeHTML(q.question)}</b>`;
-      const labels = ['A','B','C','D'];
-      optsEl.innerHTML = labels.map((L,i)=>`${L}. ${escapeHTML(q.options[i])}`).join('<br>');
-      resultBox.innerHTML = `<p><b>Question ${qIndex+1}</b> of ${quizSet.length}</p>`;
-    }
+  function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
 
-    function syncInputs(){
-      for(let i=0;i<4;i++){ sliders[i].value=currentValues[i]; inputs[i].value=currentValues[i]; }
-      const total = currentValues.reduce((a,b)=>a+b,0);
-      totalv.textContent = total;
-      submitBtn.disabled = (total!==100);
-    }
+  function showSummary(){
+    quizCard.style.display='none';
+    summaryCard.style.display='block';
 
-    function updateValue(i,v){ currentValues[i]=clamp(v); syncInputs(); }
+    let totalScore = 0;
+    let rows = results.map((r,i)=>{
+      const scoreText = (r.score===Infinity) ? '∞' : r.score.toFixed(3);
+      totalScore += (r.score===Infinity) ? 100 : r.score;
 
-    function scoreQuestion(correctIndex){
-      const p = currentValues[correctIndex] / 100;
-      if (p <= 0) return Infinity;
-      return -Math.log(p);
-    }
+      const probs = r.userP.map((p,j)=>`${['A','B','C','D'][j]}=${p}%`).join(', ');
 
-    function submitAnswer(){
-      const total=currentValues.reduce((a,b)=>a+b,0);
-      if(total!==100) return alert("Make sure total = 100%");
-      const q=quizSet[qIndex];
-      const score=scoreQuestion(q.correct);
+      const color = r.score===Infinity ? '#ef4444'
+                 : r.score < 0.2 ? '#22c55e'
+                 : r.score < 1 ? '#84cc16'
+                 : '#f97316';
 
-      results.push({
-        question:q.question,
-        correct:q.options[q.correct],
-        userP:[...currentValues],
-        score
-      });
+      return `<tr>
+        <td>${i+1}</td>
+        <td>${escapeHTML(r.question)}</td>
+        <td>${escapeHTML(r.correct)}</td>
+        <td>${escapeHTML(probs)}</td>
+        <td style="color:${color}; font-weight:600;">${scoreText}</td>
+      </tr>`;
+    }).join('');
 
-      qIndex++;
-      if(qIndex < quizSet.length){
-        resultBox.innerHTML=`<b>✅ Recorded!</b> Loading next question...`;
-        setTimeout(()=>{ renderQuestion(quizSet[qIndex]); resetAll(); },800);
-      } else {
-        showSummary();
-      }
-    }
+    const avgScore = (totalScore / results.length).toFixed(3);
 
-    function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
-
-    function showSummary(){
-      quizCard.style.display='none';
-      summaryCard.style.display='block';
-
-      let totalScore = 0;
-
-      let rows = results.map((r,i)=>{
-        const displayScore = r.score===Infinity ? '∞' : r.score.toFixed(3);
-
-        // 🔥 INFINITY NOW ADDS SCORE_CAP
-        const aggregate = r.score===Infinity ? SCORE_CAP : r.score;
-        totalScore += aggregate;
-
-        const probs = r.userP.map((p,j)=>`${['A','B','C','D'][j]}=${p}%`).join(', ');
-        const color = r.score === Infinity ? '#ef4444'
-                   : r.score < 0.2 ? '#22c55e'
-                   : r.score < 1   ? '#84cc16'
-                   : '#f97316';
-
-        return `
+    summaryBox.innerHTML = `
+      <table>
         <tr>
-          <td>${i+1}</td>
-          <td>${escapeHTML(r.question)}</td>
-          <td>${escapeHTML(r.correct)}</td>
-          <td>${escapeHTML(probs)}</td>
-          <td style="color:${color}; font-weight:600;">${displayScore}</td>
-        </tr>`;
-      }).join('');
+          <th>#</th>
+          <th>Question</th>
+          <th>Correct Answer</th>
+          <th>Your Confidence</th>
+          <th>Score</th>
+        </tr>
+        ${rows}
+      </table>
 
-      const avgScore = (totalScore / results.length).toFixed(3);
+      <p style="margin-top:14px; color:#444;">
+        If you assign <b>0%</b> to the correct answer, your score for that question is shown as 
+        <b>∞</b>, but for the final average it is <b>penalised as 100</b>.
+      </p>
 
-      summaryBox.innerHTML = `
-        <table>
-          <tr><th>#</th><th>Question</th><th>Correct</th><th>Your Confidence</th><th>Score</th></tr>
-          ${rows}
-        </table>
-        <p><b>Average Score:</b> ${avgScore} (best possible score: 0.0)</p>
+      <p><b>Average Score:</b> ${avgScore} (best possible score: 0.0)</p>
 
-        <button onclick="location.reload()">🔁 Play Again</button>
-      `;
-    }
+      <button onclick="location.reload()">🔁 Play Again</button>
+    `;
+  }
 
-    sliders.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
-    inputs.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
-    submitBtn.addEventListener('click',submitAnswer);
-    resetBtn.addEventListener('click',resetAll);
+  sliders.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
+  inputs.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
+  submitBtn.addEventListener('click',submitAnswer);
+  resetBtn.addEventListener('click',resetAll);
 
-    (async function init(){
-      await loadDB();
-      qIndex=0;
-      renderQuestion(quizSet[qIndex]);
-      resetAll();
-    })();
-  </script>
+  (async function init(){
+    await loadDB(); 
+    qIndex = 0; 
+    renderQuestion(quizSet[qIndex]); 
+    resetAll(); 
+  })();
+</script>
+
 </body>
 </html>
