@@ -2,225 +2,266 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>ConfiQuiz – Confidence Calibration Quiz</title>
+  <title>ConfiQuiz – Practice Sliders</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root { --radius: 14px; --border: #e5e7eb; --muted: #6b7280; }
-    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin: 14px; color:#111827; background:#f9fafb; line-height:1.6; padding-bottom:60px; }
-    a { color:#2563eb; text-decoration:none; }
-    a:hover { text-decoration:underline; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+           margin: 14px; color:#111827; background:#f9fafb; }
 
-    .intro { background:linear-gradient(180deg,#fff,#f8fafc);
-             border:1px solid var(--border); border-radius:var(--radius);
-             box-shadow:0 6px 24px rgba(0,0,0,.05);
-             padding:16px; max-width:640px; margin:0 auto 20px; }
-    .intro h1 { font-size:20px; margin-bottom:8px; }
-    .intro p { color:#374151; margin:6px 0; }
-    .intro code { background:#f3f4f6; padding:2px 6px; border-radius:6px; }
+    .intro { background: linear-gradient(180deg,#ffffff, #f8fafc);
+             border:1px solid var(--border); border-radius: var(--radius);
+             padding:16px; max-width: 860px; margin: 0 auto 16px;
+             box-shadow:0 6px 24px rgba(0,0,0,.06); }
+    .intro h1 { font-size:20px; margin:0 0 8px; }
+    .intro p { margin:6px 0; color:#334155; }
+    .intro ul { margin:8px 0 0 18px; color:#334155; }
+    .intro .actions { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .intro .actions button { padding:10px 16px; border-radius:10px;
+                             border:1px solid var(--border);
+                             background:#111827; color:white; font-weight:600;
+                             cursor:pointer; }
+    .intro .muted { color: var(--muted); font-size: 13px; }
 
     .card { background:#fff; border:1px solid var(--border); border-radius:var(--radius);
-            box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px; max-width:640px; margin:0 auto; }
+            box-shadow:0 6px 24px rgba(0,0,0,.06); padding:16px;
+            max-width:640px; margin:0 auto; }
     h2 { font-size:18px; margin:0 0 6px; }
-    .opts { line-height:1.6; margin:8px 0 14px; }
-    .row { display:grid; grid-template-columns:28px 1fr 72px; gap:10px; align-items:center; margin:12px 0; }
-    input[type="range"] { width:100%; }
-    input[type="number"] { width:72px; padding:8px; border:1px solid var(--border); border-radius:8px; }
-    button { padding:10px 16px; border-radius:10px; border:1px solid var(--border);
-             background:#f3f4f6; font-weight:600; cursor:pointer; }
-    .actions { display:flex; gap:10px; margin-top:12px; flex-wrap: wrap; }
-    pre { background:#f3f4f6; padding:8px; border-radius:8px; font-size:13px; }
-    table { border-collapse:collapse; width:100%; margin-top:10px; font-size:14px; }
-    th, td { border:1px solid #e5e7eb; padding:6px 8px; text-align:left; vertical-align:top; }
-    th { background:#f3f4f6; }
     .muted { color: var(--muted); }
 
-    footer {
-      position:fixed;
-      bottom:0;
-      left:0;
-      width:100%;
-      background:#f9fafb;
-      border-top:1px solid #e5e7eb;
-      text-align:center;
-      padding:10px 0;
-      color:#6b7280;
-      font-size:14px;
-      backdrop-filter:blur(6px);
-      z-index:999;
-    }
+    .opts { line-height:1.6; margin:8px 0 14px; }
+    .row { display:grid; grid-template-columns:28px 1fr 72px; gap:10px;
+           align-items:center; margin:12px 0; }
+
+    input[type="range"] { width:100%; }
+    input[type="number"] { width:72px; padding:8px;
+                           border:1px solid var(--border); border-radius:8px; }
+
+    .total, .timer { font-weight:600; margin-top:8px; }
+    .tip { margin-top:4px; font-size:13px; color: var(--muted); }
+
+    button { padding:10px 16px; border-radius:10px;
+             border:1px solid var(--border); background:#f3f4f6;
+             font-weight:600; cursor:pointer; }
+    .actions { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+
+    code { background:#f3f4f6; padding:0 6px; border-radius:6px; }
   </style>
 </head>
 <body>
 
-  <!-- Intro Section -->
-  <div class="intro">
-    <h1>ConfiQuiz 🧠</h1>
-    <p>
-      This is a quiz game that tests not only whether you're <b>correct</b>, but also <b>how confident</b> you are.  
-      For each multiple-choice question, distribute 100% probability among the four answers.
-    </p>
-    <p>
-      The score for each question is based on <b>−ln(p<sub>correct</sub>)</b>, inspired by 
-      <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence" target="_blank">KL Divergence</a>.  
-      Lower scores indicate better calibration — a perfect score (0.000) means you were 100% confident and correct.
-    </p>
-    <p class="muted">
-      Based on <a href="https://www.linkedin.com/posts/vanhoucke_when-i-was-at-stanford-there-was-a-professor-activity-7370087604651819008-Co2b" target="_blank">this post by Vincent Vanhoucke</a>.
-    </p>
-  </div>
+  <!-- Intro section -->
+  <section class="intro" id="intro">
+    <h1>ConfiQuiz (Practice Mode)</h1>
+    <p>Test your knowledge <em>and</em> your calibration. For each question,
+       assign probabilities to A/B/C/D so they sum to <b>100%</b>.</p>
 
-  <!-- Quiz -->
-  <div class="card" id="quizCard">
+    <ul>
+      <li>Use higher % for answers you believe are more likely.</li>
+      <li>Your score = <code>−ln(p_correct)</code> (lower is better).</li>
+      <li>0% on the correct answer → shown as “∞” but counts as a penalty.</li>
+      <li>Click <b>New question</b> to draw from the question pool.</li>
+    </ul>
+
+    <div class="actions">
+      <button id="dismissIntro">Start practice</button>
+      <span class="muted">Fully client-side. Safe for GitHub Pages.</span>
+    </div>
+  </section>
+
+  <!-- Main quiz card -->
+  <div class="card">
     <h2 id="qtitle">ConfiQuiz</h2>
-    <div id="qtext">Loading question…</div>
+    <div id="qtext" style="margin-top:4px">Loading question…</div>
     <div id="opts" class="opts"></div>
 
-    <div class="row"><div>A</div><input id="slider0" type="range" min="0" max="100"><input id="input0" type="number" min="0" max="100"></div>
-    <div class="row"><div>B</div><input id="slider1" type="range" min="0" max="100"><input id="input1" type="number" min="0" max="100"></div>
-    <div class="row"><div>C</div><input id="slider2" type="range" min="0" max="100"><input id="input2" type="number" min="0" max="100"></div>
-    <div class="row"><div>D</div><input id="slider3" type="range" min="0" max="100"><input id="input3" type="number" min="0" max="100"></div>
-
-    <div>Total: <span id="totalv">100</span>%</div>
-    <div class="actions">
-      <button id="submitBtn">Submit</button>
-      <button id="resetBtn">Reset</button>
+    <!-- Sliders -->
+    <div class="row">
+      <div>A</div>
+      <input id="slider0" type="range" min="0" max="100" step="1" />
+      <input id="input0" type="number" min="0" max="100" />
+    </div>
+    <div class="row">
+      <div>B</div>
+      <input id="slider1" type="range" min="0" max="100" step="1" />
+      <input id="input1" type="number" min="0" max="100" />
+    </div>
+    <div class="row">
+      <div>C</div>
+      <input id="slider2" type="range" min="0" max="100" step="1" />
+      <input id="input2" type="number" min="0" max="100" />
+    </div>
+    <div class="row">
+      <div>D</div>
+      <input id="slider3" type="range" min="0" max="100" step="1" />
+      <input id="input3" type="number" min="0" max="100" />
     </div>
 
-    <div id="resultBox"></div>
-  </div>
+    <div class="total">Total: <span id="totalv">100</span>%</div>
+    <div class="timer">⏱️ Time left: <span id="tleft">60</span>s</div>
+    <div class="tip">Make the total exactly <b>100%</b> before submitting.</div>
 
-  <!-- Summary -->
-  <div class="card" id="summaryCard" style="display:none;">
-    <h2>📊 Your Results</h2>
-    <div id="summaryBox"></div>
+    <div class="actions">
+      <button id="submitBtn">Submit</button>
+      <button id="resetBtn">Reset 25% each</button>
+      <button id="newSetBtn">New question</button>
+    </div>
   </div>
-
-  <!-- Footer -->
-  <footer>
-    Made by <b>Neeraj</b>
-    <a href="https://www.linkedin.com/in/neeraj-mohan-s-5360a077/"
-       target="_blank"
-       style="text-decoration:none; margin-left:6px; vertical-align:middle;">
-      <svg xmlns="http://www.w3.org/2000/svg"
-           viewBox="0 0 24 24"
-           fill="#0a66c2"
-           width="18"
-           height="18"
-           style="vertical-align:middle;">
-        <path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8.34 19H5.67V9h2.67v10zM7 7.67c-.86 0-1.56-.7-1.56-1.56 0-.86.7-1.56 1.56-1.56.86 0 1.56.7 1.56 1.56 0 .86-.7 1.56-1.56 1.56zm12 11.33h-2.67v-4.79c0-1.14-.02-2.61-1.59-2.61-1.59 0-1.84 1.24-1.84 2.53v4.87H10.23V9h2.56v1.37h.04c.36-.68 1.25-1.39 2.58-1.39 2.76 0 3.27 1.82 3.27 4.19V19z"/>
-      </svg>
-    </a>
-  </footer>
 
   <script>
+    // ---------- CONFIG ----------
+    const SCORE_CAP = 100.0;  // penalty for zero-confidence correct answer
+
+    // ---------- STATE ----------
     let QUESTIONS = [];
-    let quizSet = [];
-    let currentValues = [25,25,25,25];
     let qIndex = 0;
-    let results = [];
+    let currentValues = [25, 25, 25, 25];
 
-    const sliders = [0,1,2,3].map(i => document.getElementById('slider'+i));
-    const inputs = [0,1,2,3].map(i => document.getElementById('input'+i));
-    const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const qtext = document.getElementById('qtext');
-    const optsEl = document.getElementById('opts');
-    const totalv = document.getElementById('totalv');
-    const resultBox = document.getElementById('resultBox');
-    const quizCard = document.getElementById('quizCard');
-    const summaryCard = document.getElementById('summaryCard');
-    const summaryBox = document.getElementById('summaryBox');
+    let timeRemaining = 60;
+    let timerId = null;
 
-    function clamp(x){ x=parseInt(x??0,10); return isFinite(x)?Math.max(0,Math.min(100,x)):0; }
-    function escapeHTML(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    // ---------- DOM ----------
+    const intro = document.getElementById("intro");
+    const dismissIntroBtn = document.getElementById("dismissIntro");
 
-    async function loadDB(){
-      const res = await fetch('questions.json', { cache: 'no-store' });
-      QUESTIONS = await res.json();
-      quizSet = QUESTIONS.sort(() => 0.5 - Math.random()).slice(0, 5); // pick 5 random
+    const qtext = document.getElementById("qtext");
+    const optsEl = document.getElementById("opts");
+    const totalv = document.getElementById("totalv");
+    const tleft = document.getElementById("tleft");
+
+    const sliders = [0,1,2,3].map(i => document.getElementById("slider" + i));
+    const inputs  = [0,1,2,3].map(i => document.getElementById("input" + i));
+
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn  = document.getElementById("resetBtn");
+    const newSetBtn = document.getElementById("newSetBtn");
+
+    // ---------- HELPERS ----------
+    function clamp(x) {
+      x = parseInt(x ?? 0, 10);
+      return isFinite(x) ? Math.max(0, Math.min(100, x)) : 0;
     }
 
-    function renderQuestion(q){
-      qtext.innerHTML = `❓ <b>${escapeHTML(q.question)}</b>`;
-      const labels = ['A','B','C','D'];
-      optsEl.innerHTML = labels.map((L,i)=>`${L}. ${escapeHTML(q.options[i])}`).join('<br>');
-      resultBox.innerHTML = `<p><b>Question ${qIndex+1}</b> of ${quizSet.length}</p>`;
+    function escapeHTML(s) {
+      return String(s).replace(/[&<>"']/g, c =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+      );
     }
 
-    function syncInputs(){
-      for(let i=0;i<4;i++){ sliders[i].value=currentValues[i]; inputs[i].value=currentValues[i]; }
-      const total = currentValues.reduce((a,b)=>a+b,0);
-      totalv.textContent = total;
-      submitBtn.disabled = (total!==100);
+    function renderQuestion(q) {
+      qtext.innerHTML = "❓ <b>" + escapeHTML(q.question) + "</b>";
+      const labels = ["A", "B", "C", "D"];
+      optsEl.innerHTML =
+        labels.map((L, i) =>
+          `${L}. ${escapeHTML(q.options[i])}`
+        ).join("<br/>");
     }
 
-    function updateValue(i,v){ currentValues[i]=clamp(v); syncInputs(); }
-
-    function scoreQuestion(correctIndex){
-      const p = currentValues[correctIndex] / 100;
-      if (p <= 0) return Infinity;
-      return -Math.log(p);
-    }
-
-    function submitAnswer(){
-      const total = currentValues.reduce((a,b)=>a+b,0);
-      if(total!==100) return alert("Make sure total = 100%");
-      const q = quizSet[qIndex];
-      const score = scoreQuestion(q.correct);
-      results.push({ question: q.question, correct: q.options[q.correct], userP: [...currentValues], score });
-
-      qIndex++;
-      if (qIndex < quizSet.length) {
-        resultBox.innerHTML = `<b>✅ Recorded!</b> Loading next question...`;
-        setTimeout(() => { renderQuestion(quizSet[qIndex]); resetAll(); }, 800);
-      } else {
-        showSummary();
+    function syncInputs() {
+      for (let i = 0; i < 4; i++) {
+        sliders[i].value = currentValues[i];
+        inputs[i].value = currentValues[i];
       }
+      updateTotal();
     }
 
-    function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
-
-    function showSummary(){
-      quizCard.style.display = 'none';
-      summaryCard.style.display = 'block';
-
-      let totalScore = 0;
-      let rows = results.map((r,i)=>{
-        const scoreText = (r.score===Infinity) ? '∞' : r.score.toFixed(3);
-        totalScore += (r.score===Infinity) ? 0 : r.score;
-        const probs = r.userP.map((p,j)=>`${['A','B','C','D'][j]}=${p}%`).join(', ');
-        const color = r.score === Infinity ? '#ef4444'
-                    : r.score < 0.2 ? '#22c55e'
-                    : r.score < 1 ? '#84cc16'
-                    : '#f97316';
-        return `<tr>
-          <td>${i+1}</td>
-          <td>${escapeHTML(r.question)}</td>
-          <td>${escapeHTML(r.correct)}</td>
-          <td>${escapeHTML(probs)}</td>
-          <td style="color:${color}; font-weight:600;">${scoreText}</td>
-        </tr>`;
-      }).join('');
-
-      const avg = results.every(r=>r.score===Infinity) ? '∞' :
-        (totalScore / results.length).toFixed(3);
-
-      summaryBox.innerHTML = `
-        <table>
-          <tr><th>#</th><th>Question</th><th>Correct Answer</th><th>Your Confidence</th><th>Score</th></tr>
-          ${rows}
-        </table>
-        <p><b>Average Score:</b> ${avg} (best possible: 0.0)</p>
-        <button onclick="location.reload()">🔁 Play Again</button>
-      `;
+    function updateValue(idx, val) {
+      currentValues[idx] = clamp(val);
+      syncInputs();
     }
 
-    sliders.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
-    inputs.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
-    submitBtn.addEventListener('click',submitAnswer);
-    resetBtn.addEventListener('click',resetAll);
+    function updateTotal() {
+      const total = currentValues.reduce((a, b) => a + b, 0);
+      totalv.textContent = total;
+      submitBtn.disabled = (total !== 100 || timeRemaining <= 0);
+    }
 
-    (async function init(){ await loadDB(); qIndex=0; renderQuestion(quizSet[qIndex]); resetAll(); })();
+    function stopTick() {
+      if (timerId) clearTimeout(timerId);
+      timerId = null;
+    }
+
+    function tick() {
+      tleft.textContent = timeRemaining;
+      if (timeRemaining <= 0) {
+        submitBtn.disabled = true;
+        return;
+      }
+      timeRemaining -= 1;
+      timerId = setTimeout(tick, 1000);
+    }
+
+    function scoreForProb(probCorrectPercent) {
+      const p = probCorrectPercent / 100.0;
+      if (p <= 0) return { display: "∞", value: SCORE_CAP };
+      const v = -Math.log(p);
+      return { display: v.toFixed(3), value: v };
+    }
+
+    function submitAnswer() {
+      const total = currentValues.reduce((a, b) => a + b, 0);
+      if (total !== 100 || timeRemaining <= 0) return;
+
+      alert("Your answer:\n" + JSON.stringify({
+        0: currentValues[0],
+        1: currentValues[1],
+        2: currentValues[2],
+        3: currentValues[3],
+        __q: qIndex
+      }, null, 2));
+    }
+
+    function sampleIndex() {
+      if (!QUESTIONS.length) return 0;
+      return Math.floor(Math.random() * QUESTIONS.length);
+    }
+
+    async function loadDB() {
+      const res = await fetch("questions.json", { cache: "no-store" });
+      QUESTIONS = await res.json();
+    }
+
+    async function loadQuestion(idx) {
+      if (!QUESTIONS.length) await loadDB();
+      qIndex = Math.max(0, Math.min(idx, QUESTIONS.length - 1));
+      renderQuestion(QUESTIONS[qIndex]);
+    }
+
+    // ---------- EVENT LISTENERS ----------
+    dismissIntroBtn.addEventListener("click", () => {
+      intro.style.display = "none";
+    });
+
+    sliders.forEach((sl, i) =>
+      sl.addEventListener("input", e => updateValue(i, e.target.value))
+    );
+    inputs.forEach((inp, i) =>
+      inp.addEventListener("input", e => updateValue(i, e.target.value))
+    );
+
+    submitBtn.addEventListener("click", submitAnswer);
+    resetBtn.addEventListener("click", () => {
+      currentValues = [25, 25, 25, 25];
+      syncInputs();
+    });
+
+    newSetBtn.addEventListener("click", async () => {
+      currentValues = [25, 25, 25, 25];
+      syncInputs();
+      stopTick();
+      timeRemaining = 60;
+      tick();
+      await loadQuestion(sampleIndex());
+    });
+
+    // ---------- INIT ----------
+    (async function init() {
+      syncInputs();
+      await loadDB();
+      await loadQuestion(sampleIndex());
+      tick();
+    })();
   </script>
+
 </body>
 </html>
