@@ -309,21 +309,18 @@
     syncInputs();
   }
 
-  // Make a 20-character bar of blocks based on p_correct (0–100)
+  // 20-char confidence bar
   function makeBar(p_correct){
-    const filled = Math.round(p_correct / 5);  // 0–20
+    const filled = Math.round(p_correct / 5);
     const empty  = 20 - filled;
-    const blockFilled = "█";
-    const blockEmpty  = "░";
-    return blockFilled.repeat(filled) + blockEmpty.repeat(empty);
+    return "█".repeat(filled) + "░".repeat(empty);
   }
 
-  // Build plain-text share message (for clipboard)
+  // SHARE TEXT (NO COLORS)
   function makeShareText(avgScore){
     const lines = results.map((r,i) => {
-      const correctIdx = quizSet[i].correct;
-      const pCorrect = r.userP[correctIdx];
-      const bar = makeBar(pCorrect);
+      const ci = quizSet[i].correct;
+      const bar = makeBar(r.userP[ci]);
       return `Q${i+1} ${bar}`;
     }).join("\n");
 
@@ -365,18 +362,16 @@ Play at: ${location.origin}${location.pathname}`;
 
     const avgScore = (totalScore / results.length).toFixed(3);
 
-    // Build Wordle-style bar plot for display (HTML with colors)
+    // COLORED display bars
     const barLinesHtml = results.map((r,i) => {
-      const correctIdx = quizSet[i].correct;
-      const pCorrect = r.userP[correctIdx];
-      const bar = makeBar(pCorrect);
+      const ci = quizSet[i].correct;
+      const bar = makeBar(r.userP[ci]);
 
-      // Determine if user’s top option was actually correct
       const maxP = Math.max(...r.userP);
       const bestIdx = r.userP.indexOf(maxP);
-      const isCorrectTop = (bestIdx === correctIdx);
+      const isCorrectTop = (bestIdx === ci);
 
-      const barColor = isCorrectTop ? '#16a34a' : '#dc2626'; // green if correct, red if wrong
+      const barColor = isCorrectTop ? '#16a34a' : '#dc2626';
 
       return `<div>
         <span>Q${i+1} </span>
@@ -413,18 +408,14 @@ Play at: ${location.origin}${location.pathname}`;
       </div>
     `;
 
-    // Wire up "Copy Score" button
+    // COPY BUTTON
     const copyBtn = document.getElementById('copyBtn');
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
         const shareText = makeShareText(avgScore);
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(shareText)
-            .then(() => alert("Score copied to clipboard! 🎉"))
-            .catch(() => alert("Could not copy automatically. You can select and copy the score text manually."));
-        } else {
-          alert("Clipboard API not available. Please select and copy the score text manually.");
-        }
+        navigator.clipboard.writeText(shareText)
+          .then(() => alert("Score copied to clipboard! 🎉"))
+          .catch(() => alert("Clipboard error — copy manually."));
       });
     }
   }
