@@ -14,7 +14,7 @@
 
     body { 
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; 
-      margin: 0; 
+      margin: 0;
       padding: 0 14px 80px; 
       color:#111827; 
       background:#f9fafb; 
@@ -291,7 +291,12 @@
       return `<tr>
         <td>${i+1}</td>
         <td>${escapeHTML(r.question)}</td>
-        <td>${escapeHTML(r.correct)}</td>
+        <td>
+          ${escapeHTML(r.correct)}
+          <span class="muted">
+            &nbsp;(${['A','B','C','D'][quizSet[i].correct]})
+          </span>
+        </td>
         <td>${escapeHTML(probs)}</td>
         <td style="color:${color}; font-weight:600;">${scoreText}</td>
       </tr>`;
