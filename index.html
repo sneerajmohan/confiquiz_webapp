@@ -88,8 +88,6 @@
 
     .actions { display:flex; gap:12px; margin-top:14px; flex-wrap: wrap; }
 
-    pre { background:#f3f4f6; padding:10px; border-radius:8px; font-size:13px; }
-
     table { 
       border-collapse:collapse; 
       width:100%; 
@@ -158,10 +156,26 @@
     <div id="qtext">Loading question…</div>
     <div id="opts" class="opts"></div>
 
-    <div class="row"><div>A</div><input id="slider0" type="range" min="0" max="100"><input id="input0" type="number" min="0" max="100"></div>
-    <div class="row"><div>B</div><input id="slider1" type="range" min="0" max="100"><input id="input1" type="number" min="0" max="100"></div>
-    <div class="row"><div>C</div><input id="slider2" type="range" min="0" max="100"><input id="input2" type="number" min="0" max="100"></div>
-    <div class="row"><div>D</div><input id="slider3" type="range" min="0" max="100"><input id="input3" type="number" min="0" max="100"></div>
+    <div class="row">
+      <div>A</div>
+      <input id="slider0" type="range" min="0" max="100">
+      <input id="input0" type="number" min="0" max="100">
+    </div>
+    <div class="row">
+      <div>B</div>
+      <input id="slider1" type="range" min="0" max="100">
+      <input id="input1" type="number" min="0" max="100">
+    </div>
+    <div class="row">
+      <div>C</div>
+      <input id="slider2" type="range" min="0" max="100">
+      <input id="input2" type="number" min="0" max="100">
+    </div>
+    <div class="row">
+      <div>D</div>
+      <input id="slider3" type="range" min="0" max="100">
+      <input id="input3" type="number" min="0" max="100">
+    </div>
 
     <div>Total: <span id="totalv">100</span>%</div>
 
@@ -216,13 +230,21 @@
   const summaryCard = document.getElementById('summaryCard');
   const summaryBox = document.getElementById('summaryBox');
 
-  function clamp(x){ x=parseInt(x??0,10); return isFinite(x)?Math.max(0,Math.min(100,x)):0; }
-  function escapeHTML(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function clamp(x){
+    x = parseInt(x ?? 0, 10);
+    return isFinite(x) ? Math.max(0, Math.min(100, x)) : 0;
+  }
+
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
 
   async function loadDB(){
     const res = await fetch('questions.json', { cache:'no-store' });
     QUESTIONS = await res.json();
-    quizSet = QUESTIONS.sort(()=>0.5-Math.random()).slice(0,5);
+    quizSet = QUESTIONS.sort(() => 0.5 - Math.random()).slice(0,5);
   }
 
   function renderQuestion(q){
@@ -233,13 +255,19 @@
   }
 
   function syncInputs(){
-    for(let i=0;i<4;i++){ sliders[i].value=currentValues[i]; inputs[i].value=currentValues[i]; }
+    for(let i=0;i<4;i++){
+      sliders[i].value = currentValues[i];
+      inputs[i].value = currentValues[i];
+    }
     const total = currentValues.reduce((a,b)=>a+b,0);
     totalv.textContent = total;
-    submitBtn.disabled = (total!==100);
+    submitBtn.disabled = (total !== 100);
   }
 
-  function updateValue(i,v){ currentValues[i]=clamp(v); syncInputs(); }
+  function updateValue(i,v){
+    currentValues[i] = clamp(v);
+    syncInputs();
+  }
 
   function scoreQuestion(correctIndex){
     const p = currentValues[correctIndex] / 100;
@@ -249,7 +277,10 @@
 
   function submitAnswer(){
     const total = currentValues.reduce((a,b)=>a+b,0);
-    if(total!==100) return alert("Make sure total = 100%");
+    if (total !== 100){
+      alert("Make sure total = 100%");
+      return;
+    }
 
     const q = quizSet[qIndex];
     const score = scoreQuestion(q.correct);
@@ -264,36 +295,58 @@
     qIndex++;
     if (qIndex < quizSet.length) {
       resultBox.innerHTML = `<b>✅ Recorded!</b> Loading next question...`;
-      setTimeout(()=>{ renderQuestion(quizSet[qIndex]); resetAll(); }, 800);
+      setTimeout(() => {
+        renderQuestion(quizSet[qIndex]);
+        resetAll();
+      }, 800);
     } else {
       showSummary();
     }
   }
 
-  function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
+  function resetAll(){
+    currentValues = [25,25,25,25];
+    syncInputs();
+  }
 
-  function makeBar(p_correct, isCorrect){
-  const filled = Math.round(p_correct/5);  // 0–20
-  const empty  = 20 - filled;
-  const blockFilled = isCorrect ? "█" : "█";
-  const blockEmpty  = "░";
-  return blockFilled.repeat(filled) + blockEmpty.repeat(empty);
+  // Make a 20-character bar of blocks based on p_correct (0–100)
+  function makeBar(p_correct){
+    const filled = Math.round(p_correct / 5);  // 0–20
+    const empty  = 20 - filled;
+    const blockFilled = "█";
+    const blockEmpty  = "░";
+    return blockFilled.repeat(filled) + blockEmpty.repeat(empty);
+  }
+
+  // Build plain-text share message (for clipboard)
+  function makeShareText(avgScore){
+    const lines = results.map((r,i) => {
+      const correctIdx = quizSet[i].correct;
+      const pCorrect = r.userP[correctIdx];
+      const bar = makeBar(pCorrect);
+      return `Q${i+1} ${bar}`;
+    }).join("\n");
+
+    return `ConfiQuiz – Avg score: ${avgScore} (best: 0.0)
+${lines}
+
+Play at: ${location.origin}${location.pathname}`;
   }
 
   function showSummary(){
-    quizCard.style.display='none';
-    summaryCard.style.display='block';
+    quizCard.style.display = 'none';
+    summaryCard.style.display = 'block';
 
     let totalScore = 0;
-    let rows = results.map((r,i)=>{
-      const scoreText = (r.score===Infinity) ? '∞' : r.score.toFixed(3);
-      totalScore += (r.score===Infinity) ? 100 : r.score;
+    const rows = results.map((r,i) => {
+      const scoreText = (r.score === Infinity) ? '∞' : r.score.toFixed(3);
+      totalScore += (r.score === Infinity) ? 100 : r.score;
 
       const probs = r.userP.map((p,j)=>`${['A','B','C','D'][j]}=${p}%`).join(', ');
 
-      const color = r.score===Infinity ? '#ef4444'
+      const color = r.score === Infinity ? '#ef4444'
                  : r.score < 0.2 ? '#22c55e'
-                 : r.score < 1 ? '#84cc16'
+                 : r.score < 1   ? '#84cc16'
                  : '#f97316';
 
       return `<tr>
@@ -311,6 +364,25 @@
     }).join('');
 
     const avgScore = (totalScore / results.length).toFixed(3);
+
+    // Build Wordle-style bar plot for display (HTML with colors)
+    const barLinesHtml = results.map((r,i) => {
+      const correctIdx = quizSet[i].correct;
+      const pCorrect = r.userP[correctIdx];
+      const bar = makeBar(pCorrect);
+
+      // Determine if user’s top option was actually correct
+      const maxP = Math.max(...r.userP);
+      const bestIdx = r.userP.indexOf(maxP);
+      const isCorrectTop = (bestIdx === correctIdx);
+
+      const barColor = isCorrectTop ? '#16a34a' : '#dc2626'; // green if correct, red if wrong
+
+      return `<div>
+        <span>Q${i+1} </span>
+        <span style="color:${barColor};">${bar}</span>
+      </div>`;
+    }).join('');
 
     summaryBox.innerHTML = `
       <table>
@@ -331,14 +403,36 @@
 
       <p><b>Average Score:</b> ${avgScore} (best possible score: 0.0)</p>
 
-      <button onclick="location.reload()">🔁 Play Again</button>
+      <div style="margin-top:18px; font-family:monospace; font-size:16px;">
+        ${barLinesHtml}
+      </div>
+
+      <div class="actions" style="margin-top:16px;">
+        <button id="copyBtn" type="button">📋 Copy Score</button>
+        <button type="button" onclick="location.reload()">🔁 Play Again</button>
+      </div>
     `;
+
+    // Wire up "Copy Score" button
+    const copyBtn = document.getElementById('copyBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const shareText = makeShareText(avgScore);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareText)
+            .then(() => alert("Score copied to clipboard! 🎉"))
+            .catch(() => alert("Could not copy automatically. You can select and copy the score text manually."));
+        } else {
+          alert("Clipboard API not available. Please select and copy the score text manually.");
+        }
+      });
+    }
   }
 
-  sliders.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
-  inputs.forEach((s,i)=>s.addEventListener('input',e=>updateValue(i,e.target.value)));
-  submitBtn.addEventListener('click',submitAnswer);
-  resetBtn.addEventListener('click',resetAll);
+  sliders.forEach((s,i)=>s.addEventListener('input', e => updateValue(i, e.target.value)));
+  inputs.forEach((s,i)=>s.addEventListener('input', e => updateValue(i, e.target.value)));
+  submitBtn.addEventListener('click', submitAnswer);
+  resetBtn.addEventListener('click', resetAll);
 
   (async function init(){
     await loadDB(); 
