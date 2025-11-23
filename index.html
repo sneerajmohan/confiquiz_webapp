@@ -272,6 +272,14 @@
 
   function resetAll(){ currentValues=[25,25,25,25]; syncInputs(); }
 
+  function makeBar(p_correct, isCorrect){
+  const filled = Math.round(p_correct/5);  // 0–20
+  const empty  = 20 - filled;
+  const blockFilled = isCorrect ? "█" : "█";
+  const blockEmpty  = "░";
+  return blockFilled.repeat(filled) + blockEmpty.repeat(empty);
+  }
+
   function showSummary(){
     quizCard.style.display='none';
     summaryCard.style.display='block';
